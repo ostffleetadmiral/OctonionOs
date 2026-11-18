@@ -9,6 +9,15 @@ pub const COORD_MAX: i8 = 7;
 pub const DEFECT_COUNT: u8 = 7;
 pub const PHASE_STEPS_PER_CYCLE: u8 = 8;
 
+pub const PhaseConvention = enum(u8) {
+    quarter_turn_per_transit = 1,
+    three_quarter_turn_per_transit = 3,
+
+    pub fn incrementEighthTurns(self: PhaseConvention) u3 {
+        return @intCast(@intFromEnum(self));
+    }
+};
+
 pub const Coord = struct {
     x: i8,
     y: i8,
@@ -26,8 +35,8 @@ pub const Layer = struct {
 pub const Phase = struct {
     eighth_turns: u3 = 0,
 
-    pub fn transit(self: *Phase) void {
-        self.eighth_turns = @truncate((@as(u4, self.eighth_turns) + 1) % PHASE_STEPS_PER_CYCLE);
+    pub fn transit(self: *Phase, convention: PhaseConvention) void {
+        self.eighth_turns = @truncate((@as(u4, self.eighth_turns) + convention.incrementEighthTurns()) % PHASE_STEPS_PER_CYCLE);
     }
 };
 
@@ -209,14 +218,26 @@ test "six cardinal rays cover all seven imaginary Fano labels" {
     try std.testing.expect(lattice.cardinalAxesCoverImaginaryLabels());
 }
 
-test "phase advances one eighth turn and closes after eight transits" {
-    var phase = Phase{};
-    for (1..8) |step| {
-        phase.transit();
-        try std.testing.expectEqual(@as(u3, @intCast(step)), phase.eighth_turns);
+test "phase conventions are explicit and each closes after eight transits" {
+    const cases = [_]struct { convention: PhaseConvention, expected: [8]u3 }{
+        .{ .convention = .quarter_turn_per_transit, .expected = .{ 1, 2, 3, 4, 5, 6, 7, 0 } },
+        .{ .convention = .three_quarter_turn_per_transit, .expected = .{ 3, 6, 1, 4, 7, 2, 5, 0 } },
+    };
+    for (cases) |case| {
+        var phase = Phase{};
+        var visited = [_]bool{false} ** 8;
+        for (case.expected, 0..) |expected, step| {
+            phase.transit(case.convention);
+            try std.testing.expectEqual(expected, phase.eighth_turns);
+            if (step != 7) {
+                try std.testing.expect(!visited[expected]);
+                visited[expected] = true;
+            }
+        }
+        try std.testing.expectEqual(@as(u3, 0), phase.eighth_turns);
+        try std.testing.expect(!visited[0]);
+        for (visited[1..]) |seen| try std.testing.expect(seen);
     }
-    phase.transit();
-    try std.testing.expectEqual(@as(u3, 0), phase.eighth_turns);
 }
 
 test "7-defect metadata is explicit and arithmetically defined" {
