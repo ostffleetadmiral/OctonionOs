@@ -6,6 +6,9 @@ comptime {
     _ = @import("scaling.zig");
     _ = @import("routing.zig");
     _ = @import("serialize.zig");
+    _ = @import("quantum_model.zig");
+    _ = @import("interference.zig");
+    _ = @import("observer.zig");
 }
 
 test "core test suite imports integer modules" {}
