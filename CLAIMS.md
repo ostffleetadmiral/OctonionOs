@@ -10,7 +10,7 @@ the source of truth: when they disagree, the registry wins.
 | status | count | meaning |
 |---|---:|---|
 | `verified` | 20 | executable check in this tree passed |
-| `verified_with_correction` | 5 | holds modulo a named correction |
+| `verified_with_correction` | 11 | holds modulo a named correction |
 | `model_metadata` | 4 | declared labels/counts, not verified physics |
 | `register` | 7 | doctrine/narrative; no physical verdict |
 | `unsupported` | 1 | scoped failure of the exact tested claim |
@@ -53,6 +53,16 @@ dimensions (bicomplex=4, J3(O)=27, octonions=8).
 - `counts.observer_421` — `421=(3375−7)/8`, `3375−421·8=7` (verified).
 - `counts.h21_triad` — `.model_metadata`: `φ⁵+π²+φ⁻⁴≈21.106`, `7/66`
   interpretation is model mapping, not calibrated length.
+- `mound.triad_table_v1` — `.verified_with_correction`: the donor's
+  145-constant triad table (`T=φ^a+π^b+φ^c`) recomputes in Q128.128
+  integer fixed-point — 144 evaluable rows + 1 target-underflow
+  (Planck time below the precision floor), 0 arithmetic failures,
+  130/144 within 1%, worst residual 2.71%. Positioning-derived
+  correction hypotheses (inward/outward φ split, compounding term,
+  implied-base refit, exponent-residue structure) were tested and
+  rejected: implied bases cluster at canonical φ/π within 0.01% and
+  residuals are signature-fit noise. Arithmetic coverage only — not
+  physical validation.
 
 ## Scaling
 
@@ -115,4 +125,5 @@ dimensions (bicomplex=4, J3(O)=27, octonions=8).
   beyond simulator amplitudes, no 256³/512³ dense evolution, no
   i-vector↔amplitude projection, no apparatus-level transit-phase
   derivation beyond the recorded source spec, no φ/π position→equation
-  derivation.
+  derivation, no MOUND triad signature correction (residuals are fit
+  noise; see `mound.triad_table_v1`).

@@ -162,6 +162,12 @@ pub const NODES = [_]DerivationNode{
     .{ .id = "counts.h21_triad", .system = .eu_seven_axioms, .statement = "H21 triad phi^5 + pi^2 + phi^-4 ~ 21.106; 7/66 = 7 defects / (6D x 11D) correction (model interpretation).", .status = .model_metadata, .implementation = "h21_lattice_probe.zig", .verification = "h21_lattice_probe arithmetic checks", .sources = &.{
         .{ .path = "/home/admpaul/Desktop/Qstar/Book of Phi/Foundation/vX/axioms" },
     } },
+    .{ .id = "mound.triad_table_v1", .system = .mound_axioms, .statement = "MOUND triad table T(a,b,c)=phi^a+pi^b+phi^c covers 145 physical constants (donor CSV, CC BY-NC-SA 4.0). Octonion-OS independently recomputes all rows in Q128.128 integer fixed-point: 144 evaluable + 1 target-underflow (Planck time 5.39e-44 s below the 2^-129 floor), 0 arithmetic failures, 130/144 within 1%, worst residual 2.71%. Positioning-derived correction analysis (inward/outward phi split, compounding term, implied-base refit, exponent-residue structure, neighbor signatures) found NO derivable correction: implied per-term bases cluster at canonical phi/pi within 0.01%, best global scale factor is 1.0, and residuals are consistent with signature-fit noise. Fit quality is arithmetic evidence only — not physical validation.", .status = .verified_with_correction, .implementation = "mound_triad.zig + mound_triad_table.zig", .verification = "mound_triad tests: 145-row census, (0,0,0)=3, a/c symmetry, hydrogen signature, underflow-safe negative powers, target conversion, verifyAll thresholds, sign convention, non-degenerate signatures", .sources = &.{
+        .{ .path = "src/mound_triad.zig" },
+        .{ .path = "src/mound_triad_table.zig", .note = "generated from donor CSV; targets as mantissa x 10^exp, integer-only" },
+        .{ .path = "/home/admpaul/CascadeProjects/hardware/mound_triad_results.csv", .note = "donor fit results (read-only provenance)" },
+        .{ .path = "src/lattice.phi_pi_position_v1", .note = "positioning contract under which correction hypotheses were tested" },
+    } },
     .{ .id = "scaling.canonical_pairs", .system = .redox_standard, .statement = "Canonical interior/shell pairs 15/16,30/32,60/64,120/128,240/256,480/512 preserve 16/15.", .status = .verified, .implementation = "precision_ladder.zig + redox_scaling_audit.zig", .verification = "boundaryRatioExact identities incl 240/256,480/512", .sources = &.{
         .{ .path = RX ++ "/src/redox_scaling_audit.zig" },
     } },
@@ -259,6 +265,8 @@ pub const EDGES = [_]DerivationEdge{
     .{ .from = "axiom.0pow0_eq_i", .to = "system.qstar_axioms", .kind = "claimed_expansion" },
     .{ .from = "axiom.0pow0_eq_i", .to = "system.downbeat_firstprinciples", .kind = "claimed_expansion" },
     .{ .from = "counts.h21_triad", .to = "counts.observer_421", .kind = "annotates" },
+    .{ .from = "counts.h21_triad", .to = "mound.triad_table_v1", .kind = "extends" },
+    .{ .from = "mound.triad_table_v1", .to = "lattice.phi_pi_position_v1", .kind = "scopes" },
 };
 
 pub fn nodes() []const DerivationNode {

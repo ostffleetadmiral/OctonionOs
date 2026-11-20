@@ -145,6 +145,14 @@ Preserve these exactly; changing one requires an explicit user decision:
   unsigned 0..15 coordinate frame (interior 0..14, +1 shell faces)
   is the canonical compounding frame; signed [-7,+7] is the interior
   description, not a separate domain.
+- MOUND triad table (`mound_triad.zig` + generated
+  `mound_triad_table.zig`): the donor's 145-constant
+  `T=φ^a+π^b+φ^c` table verified in Q128.128 — 144 evaluable + 1
+  target-underflow (Planck time), 0 failures, 130 within 1%, worst
+  2.71%. Positioning-derived corrections were tested and rejected:
+  residuals are signature-fit noise, implied bases cluster at
+  canonical φ/π within 0.01%. Do not claim triad corrections or
+  physical validity from the fit.
 - Reversibility: the rounded side-2 stencil collision is documented;
   basis-norm preservation is not global injectivity.
   `reversible_lattice.zig` contract v1 is a declared candidate

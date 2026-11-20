@@ -8,6 +8,18 @@ changed in the engine and documentation, not verdict promotions.
 
 ### Added
 
+- `src/mound_triad.zig` + `src/mound_triad_table.zig` — MOUND triad
+  operator `T(a,b,c)=φ^a+π^b+φ^c` evaluated over the donor's 145-row
+  constants table in Q128.128 integer fixed-point. Targets stored as
+  exact `mantissa × 10^exp` integers (no float literals). Negative
+  exponents use reciprocal-base powers so |exp|≤214 underflows safely
+  to zero with an `underflowed` flag. `verifyAll` recomputes every row
+  and reports residual statistics: 144 evaluable + 1 target-underflow
+  (Planck time), 0 arithmetic failures, 130 within 1%, worst 2.71%.
+  Positioning-derived correction hypotheses tested and rejected —
+  residuals are signature-fit noise. Registered as
+  `mound.triad_table_v1`.
+
 - `src/phi_pi_position.zig` — φ/π dimensional-position contract v1:
   π anchored at E0, φ carried inward on the six cardinal directions,
   and the 16³ compounding shell (721 sites, any coord == 15) as the

@@ -46,6 +46,7 @@ comptime {
     _ = @import("ivector_readout.zig");
     _ = @import("reversible_lattice.zig");
     _ = @import("phi_pi_position.zig");
+    _ = @import("mound_triad.zig");
     _ = @import("quantum_behavior_probe.zig");
     _ = @import("quantum/gates.zig");
     _ = @import("quantum/lattice_blocks.zig");
