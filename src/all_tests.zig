@@ -42,6 +42,7 @@ comptime {
     _ = @import("axiom_derivation_audit.zig");
     _ = @import("generative_chain.zig");
     _ = @import("lattice_qbit.zig");
+    _ = @import("lattice_measure.zig");
     _ = @import("quantum_behavior_probe.zig");
     _ = @import("quantum/gates.zig");
     _ = @import("quantum/lattice_blocks.zig");

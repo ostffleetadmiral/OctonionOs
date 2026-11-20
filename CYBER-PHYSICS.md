@@ -25,6 +25,7 @@ read."
 |---|---|---|
 | Canonical lattice | `src/lattice.zig` | 15³ tensor, signed coords, census, mirror, rays, invariants |
 | Lattice qbit | `src/lattice_qbit.zig` | 4,096-site Q128 state, Hamiltonian, Chebyshev evolution, interior prep, population accounting, deterministic peak readout |
+| Measurement contract | `src/lattice_measure.zig` | software readout v1: selector Born sampling over all 4,096 sites, interior e-label class sampling, site collapse, Lüders label projection, population/digest readouts |
 | Quantum lane | `src/quantum/` | lattice Hamiltonian/evolution/blocks/entanglement/decoherence/measure/octonion-ops/simulator |
 | Behavior probes | `src/quantum_model.zig`, `interference.zig`, `observer.zig` | two-qubit Q32.32 gates, eight-phase interference, squared-amplitude sampling, passive-observer contract |
 | Reversible lane | `src/reversible_probe.zig` | NOT/CNOT/Toffoli/Fredkin/SWAP/Peres, bijection tests, uncompute |
@@ -64,6 +65,15 @@ No physical experiment runs until all of the following are declared:
 Until then, cyber results justify *designing* the measurement; they do
 not constitute one.
 
+The software half of this contract now exists: `lattice_measure.zig`
+implements measurement/readout contract v1 over the 4,096-site state —
+deterministic u64-selector Born sampling for the site observable
+(interior + shell) and the interior e-label classes, site collapse to a
+basis state, Lüders projection onto a label class with renormalization,
+and non-mutating population/digest readouts. These are declared software
+semantics for reproducible simulation, not apparatus observations; items
+1–8 above still gate any physical lane.
+
 ## Open elevation paths (software-side, in dependency order)
 
 1. **i-vector ↔ amplitude binding** — define how the 8-component
@@ -78,8 +88,10 @@ not constitute one.
    recorded; the discrete-to-equation derivation is open.
 5. **Larger-tier evolution** — sparse histograms verified through 480³;
    dense 256³/512³ translated-Fano evolution is unvalidated.
-6. **Measurement/collapse semantics** — the observer contract exists for
-   the bounded simulator; the lattice-qbit measurement API is undefined.
+6. **Measurement/collapse semantics** — software contract v1 is
+   implemented (`lattice_measure.zig`): site and interior-label
+   observables, deterministic selectors, collapse semantics. The
+   apparatus/readout mapping remains open.
 7. **QComms donor propagation** — labeling version 2 lives in this tree;
    updating the donor QComms implementation + manifest is a separate
    retro-dev decision.
@@ -95,7 +107,8 @@ not constitute one.
    embedding unsupported-scoped).
 6. φ/π dimensional formalization — open.
 7. Phase and reversible transition contracts — open.
-8. **Measurement/readout semantics — next.**
+8. **Measurement/readout semantics** — software contract v1 done
+   (`lattice_measure.zig`); physical mapping open.
 9. Scaling and precision ladder — partially done (metadata + sparse
    probes; dense large-tier evolution open).
 10. Deterministic serialization/routing — largely done.

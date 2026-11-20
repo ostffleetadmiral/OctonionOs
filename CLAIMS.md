@@ -78,6 +78,10 @@ dimensions (bicomplex=4, J3(O)=27, octonions=8).
 - `qbit.lattice_3d` — `.verified_with_correction`: 4,096-amplitude
   state over 16³; 15³ interior is named basis; i-vector is distinct;
   physical readout mapping open.
+- `measurement.lattice_contract` — `.verified_with_correction`:
+  software readout contract v1 implemented and tested (site + label
+  observables, deterministic selectors, collapse semantics); physical
+  apparatus mapping remains open.
 - `dynamics.rounded_stencil_collision` — `.verified`: side-2 rounded
   stencil non-injective (explicit collision pair).
 - `dynamics.rounded_polynomial_basis_control` —

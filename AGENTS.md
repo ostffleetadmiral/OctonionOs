@@ -112,6 +112,13 @@ Preserve these exactly; changing one requires an explicit user decision:
   reinterpret a historical digest.
 - The 8 signed-integer i-vector components are metadata, NOT the 4,096
   state amplitudes. No projection between them is established.
+- Measurement contract v1 (`src/lattice_measure.zig`): the site
+  observable covers all 4,096 sites; the e-label observable covers the
+  eight interior classes only — shell sites belong to no label
+  eigenspace and are projected out by `collapseToLabel`. Selectors are
+  deterministic u64 draws (`maxInt(u64)` rejected); `measureLabel` is a
+  Lüders projection plus renormalization. These are declared software
+  semantics, not apparatus validation.
 - Both transit-phase conventions (increments 1 and 3 eighth-turns) stay
   selectable; eight-step closure does not choose one. They are distinct
   from the interference-phase API.

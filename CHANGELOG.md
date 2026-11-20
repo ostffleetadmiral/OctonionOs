@@ -36,6 +36,12 @@ changed in the engine and documentation, not verdict promotions.
 - `src/lattice_qbit.zig` + `src/quantum/` — 4,096-site Q128 lattice qbit:
   Hamiltonian, Chebyshev evolution, interior preparation, population
   accounting, deterministic readout.
+- `src/lattice_measure.zig` — measurement/readout contract v1 for the
+  lattice qbit: deterministic u64-selector Born sampling over all
+  4,096 sites, interior e-label class sampling, site collapse,
+  Lüders label projection with renormalization, non-mutating
+  population/digest readouts. Declared software semantics; physical
+  apparatus mapping remains gated.
 - `src/qsharp_adapter.zig` — Q#-vocabulary adapter over the bounded
   state-vector module (not a Q# runtime).
 - `src/reversible_probe.zig` — classical reversible gates (NOT, CNOT,

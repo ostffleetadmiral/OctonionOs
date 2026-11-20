@@ -448,7 +448,9 @@ establishes physical realizability of the observer mechanism. This test is
 not itself a direct physical measurement of non-disturbance or collapse.
 The specific 15³ qbit's physical state variables and calibrated measurement
 mapping have not yet been connected to this observer contract; that is an
-open evidence question, not a physical-impossibility verdict.
+open evidence question, not a physical-impossibility verdict. The lattice-side
+software contract now exists separately in `src/lattice_measure.zig`
+(contract v1 below); the physical apparatus mapping remains open.
 
 ## 6. Bounded conclusions and physical elevation
 
@@ -792,7 +794,7 @@ The RedOx algebra/proof suite was ported into `src/redox_*.zig` (module imports 
 
 `src/lattice_qbit.zig` implements the current computational substrate for the project's **3D cyber-physical qbit**, a macroscopic analogue distinct from a conventional microscopic quantum bit. Its state buffer has 4,096 complex Q128.128 amplitudes over the 16³ domain; the 15³ interior has 3,375 sites, and the remaining 721 sites are shell. The interior basis has 421 e0 labels and 422 of each e1…e7. Interior preparation clears the shell, while the configured Hamiltonian determines whether subsequent evolution can couple into it. The uniform-interior helper takes a caller amplitude and does not normalize. The i-vector-to-amplitude mapping and physical readout remain separate bridges. These implementation facts and the user's overarching premise that the universe is inherently quantum are retained together; no qbit-specific apparatus mapping has yet been operationalized in this repository.
 
-The framework further interprets `i` in `0^0=i` as itself remaining in superposition until measured. Octonion-OS's local `quantum_model.zig` implements software state-vector superposition and explicit collapse; however, that is not yet a measurement map on the complete eight-component i-vector or on the 15³ cyber-physical qbit. Preserve both facts: a concrete software superposition/collapse mechanism exists, and the proposed full-i-vector/physical measurement connection still needs an operational probe.
+The framework further interprets `i` in `0^0=i` as itself remaining in superposition until measured. Octonion-OS's local `quantum_model.zig` implements software state-vector superposition and explicit collapse; `src/lattice_measure.zig` now adds a declared measurement contract over the lattice qbit's 4,096-site state (see the contract-v1 entry below). Neither is yet a measurement map on the complete eight-component i-vector, and the physical apparatus mapping remains open. Preserve both facts: concrete software superposition/collapse and measurement mechanisms exist, and the proposed full-i-vector/physical measurement connection still needs an operational probe.
 
 ## Per-axiom derivation audit — 2026-11-19 (loop semantics, revised)
 
@@ -817,3 +819,15 @@ Findings:
 The audit keeps the multi-axiom sets as views of one loop per the user's framing. It separates verified facts, the semantic map connecting them, and any still-open formalization work. This captures the user's method: verify facts individually, then map them semantically as convergent views of `0⁰=i`, with interpretations allowed to evolve as more project evidence is incorporated.
 
 **Corpus anchors and digests:** The verified-evidence inventory includes Euqinom AXIOM 0 (`zig/src/axiom_0.zig`, SHA-256 `1bf38ac07f2ed405bcdfbeb583f910e4a278815ea2e99621210ee89f30f1962a`), L15 lattice (`zig/src/l15_lattice.zig`, `dd141e7eea833821ca05a11d58d15eec408e8df444af6fcc0f609a36adafa844`), RamseyIdentity (`zig/src/ramsey_identity.zig`, `0463fbdcc24f961b3d86e1ed6c9436b8e12855563004e970930e28cfc4bf54d9`), MOUND's zero-free-parameters derivation (`docs/derivations/65-zero-free-parameters.md`, `42a807348af8d8ee56f06a60e7c303605028548316885b44d2f4f745d5a52833`), hardware generative chain (`src/generative_chain.zig`, `0fa81a16b7ea8cabf5405fe7b229edd59b5abef8459c7eba6d4a2743d59c82e5`), dimensional ladder (`src/dimensional_ladder.zig`, `20092b3ef5498e96ff41313a9683cd1d83c38ab82571a03d958c1c82c7747969`), checksum (`src/checksum_6d.zig`, `9379367ce816945d68d8226f8c549af7eb7dc8e073e93a70c78f92d347d39039`), scaling analysis (`src/scaling_analysis.zig`, `40b5fcda4904fd777d75d7e30ad3bcc24f41d2b766d2e9f9eeab9dc86389fafc`), and TheUE `science_ivector.zig` (`ebb956555054b1823b0949df1220e474b2de59cf211b23663d6b7edd56b66333`) plus `science_descent.zig` (`685e01664ac42d4c36a400379c0ae04e106624c8ed230f3556b92cfd54ba20c9`). Source files are provenance; only checked code paths count as computational evidence, and framework prose remains a semantic correspondence.
+
+### Lattice measurement contract v1 — 2026-11-19
+
+`src/lattice_measure.zig` implements the declared software measurement/readout contract over the lattice qbit's 4,096-site Q128 state. It is a contract, not a physical claim.
+
+**Observables.** The site observable resolves all 4,096 domain sites (interior + shell) with weight `|psi(i)|^2`. The e-label observable resolves the eight Fano label classes on the 15³ interior only; shell sites carry no e-label and belong to no label eigenspace, so label sampling is conditional on the interior subspace.
+
+**Sampling.** `sampleSite` and `sampleLabel` are pure (non-mutating) Born draws driven by caller-supplied u64 selectors, mapped through `Q128.fromRatio(selector, 2^64)` against cumulative squared-amplitude weights — the same half-open selector contract as `quantum_model.zig`, including rejection of `maxInt(u64)`. Selectors are reproducibility inputs, not physical randomness. `domainDigest` (SHA-256 over all amplitude limbs) and the population helpers are non-mutating readouts; `describeSite` reports index, coordinates, shell flag, e-label, and weight.
+
+**Collapse.** `measureSite` collapses psi to the sampled basis site. `measureLabel` performs the Lüders projection onto the sampled label's interior subspace and renormalizes to unit norm; shell amplitude is projected out because shell sites belong to no label eigenspace. `collapseToLabel` is two-pass: an empty class fails before psi is touched. A repeated label draw on the collapsed state returns the same class (absorbing outcome, tested).
+
+**Boundaries.** This defines software measurement semantics only. It does not map lattice amplitudes to the eight-component i-vector, does not bind any physical apparatus observable, and does not make seeded selectors physical randomness. The physical measurement gate in `CYBER-PHYSICS.md` (state variable, apparatus, calibration, controls, thresholds, artifact schema, authorization) remains closed.
