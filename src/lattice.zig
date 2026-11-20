@@ -106,6 +106,13 @@ pub const Lattice = struct {
         return self.labels[indexUnsigned(x, y, z)];
     }
 
+    /// Canonical cell label in signed True-Origin coordinates. The center
+    /// of the 15^3 lattice maps to array index (7, 7, 7).
+    pub fn labelAtSigned(self: *const Lattice, coord: Coord) ?u3 {
+        const flat = index(coord) orelse return null;
+        return self.labels[flat];
+    }
+
     pub fn layer(self: *const Lattice, layer_index: usize) ?Layer {
         if (layer_index >= LAYERS) return null;
         const z: i8 = @intCast(@as(i16, @intCast(layer_index)) - 7);
@@ -161,8 +168,36 @@ pub const Lattice = struct {
 
     pub fn validate(self: *const Lattice) bool {
         if (self.labels.len != NODE_COUNT) return false;
-        if (self.labelAt(.{ .x = 0, .y = 0, .z = 0 }) == null) return false;
-        return self.countLabel(0) == 421 and self.hasLayerMirrorSymmetry();
+        if (self.labelAtSigned(.{ .x = 0, .y = 0, .z = 0 }) != 0) return false;
+        if (!self.hasLayerMirrorSymmetry()) return false;
+        const counts = self.labelCounts();
+        if (counts[0] != 421) return false;
+        for (counts[1..]) |count| {
+            if (count != 422) return false;
+        }
+        return self.cardinalAxesCoverImaginaryLabels();
+    }
+
+    /// Exact e0..e7 population census for this lattice instance.
+    pub fn labelCounts(self: *const Lattice) [8]usize {
+        var counts = [_]usize{0} ** 8;
+        for (self.labels) |label| counts[label] += 1;
+        return counts;
+    }
+
+    /// Check the signed coordinate/index bijection and the complete z-slice
+    /// mirror invariant for this instance.
+    pub fn hasCanonicalCoordinatesAndMirrors(self: *const Lattice) bool {
+        for (0..NODE_COUNT) |flat| {
+            const coord = coordFromIndex(flat) orelse return false;
+            if (index(coord) != flat) return false;
+        }
+        return self.hasLayerMirrorSymmetry();
+    }
+
+    pub fn hasCanonicalLabels(self: *const Lattice) bool {
+        const expected = Lattice.init();
+        return std.mem.eql(u3, &self.labels, &expected.labels);
     }
 };
 
@@ -174,6 +209,7 @@ test "lattice stores 3375 Fano labels and exactly 421 e0 entries" {
     const lattice = Lattice.init();
     try std.testing.expectEqual(NODE_COUNT, lattice.labels.len);
     try std.testing.expectEqual(@as(usize, 421), lattice.countLabel(0));
+    try std.testing.expectEqual([_]usize{ 421, 422, 422, 422, 422, 422, 422, 422 }, lattice.labelCounts());
     try std.testing.expect(lattice.validate());
 }
 
@@ -184,6 +220,9 @@ test "signed coordinate and flat-index conversion round trip" {
     }
     try std.testing.expectEqual(@as(usize, 7 * SLICE_NODE_COUNT + 7 * SIDE + 7), Lattice.index(.{ .x = 0, .y = 0, .z = 0 }).?);
     try std.testing.expect(Lattice.index(.{ .x = 8, .y = 0, .z = 0 }) == null);
+    const lattice = Lattice.init();
+    try std.testing.expect(lattice.hasCanonicalCoordinatesAndMirrors());
+    try std.testing.expectEqual(@as(?u3, 0), lattice.labelAtSigned(.{ .x = 0, .y = 0, .z = 0 }));
 }
 
 test "origin and six cardinal endpoints are exactly radius seven" {
@@ -211,6 +250,17 @@ test "layer pivots and mirror state match the translated Fano tensor" {
         try std.testing.expectEqual(layer_index == 7, layer_value.is_central);
     }
     try std.testing.expect(lattice.hasLayerMirrorSymmetry());
+    try std.testing.expect(lattice.hasCanonicalLabels());
+}
+
+test "validation rejects mutations to the canonical origin and label census" {
+    var lattice = Lattice.init();
+    lattice.labels[Lattice.indexUnsigned(7, 7, 7)] = 1;
+    try std.testing.expect(!lattice.validate());
+
+    lattice = Lattice.init();
+    lattice.labels[Lattice.indexUnsigned(0, 0, 0)] = 0;
+    try std.testing.expect(!lattice.validate());
 }
 
 test "six cardinal rays cover all seven imaginary Fano labels" {
