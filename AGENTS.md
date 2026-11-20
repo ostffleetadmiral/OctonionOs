@@ -132,8 +132,12 @@ Preserve these exactly; changing one requires an explicit user decision:
 - φ/π are dimensional-position axioms from the ladder; the
   position→equation bridge remains a formalization obligation.
 - Reversibility: the rounded side-2 stencil collision is documented;
-  basis-norm preservation is not global injectivity. A lattice-native
-  reversible transition is open.
+  basis-norm preservation is not global injectivity.
+  `reversible_lattice.zig` contract v1 is a declared candidate
+  (octonion-cell Margolus CA on u8 sites, periodic boundary, provably
+  bijective steps) — classical byte lane, distinct from the Q128
+  state; `gateV1` and partition choices are conventions, not derived
+  unique dynamics.
 - `0^0 = i` roles stay distinct nodes (empty product, e0 density,
   RamseyIdentity vacuum, checksum pivot); the checksum palindrome
   `E=mc² ↔ i ↔ E=mc⁻²` is centered on the i-vector fixed point.

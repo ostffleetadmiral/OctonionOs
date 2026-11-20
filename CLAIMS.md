@@ -86,6 +86,11 @@ dimensions (bicomplex=4, J3(O)=27, octonions=8).
   declared software binding v1 (shot histogram → 8 e-components +
   shell channel; population quantization → i512); physical
   i-vector correspondence open.
+- `dynamics.reversible_lattice` — `.verified_with_correction`: declared
+  contract v1, octonion-cell Margolus CA on u8 sites over the 16³
+  torus; every primitive bijective under disjointness constraints ⇒
+  steps provably invertible. Candidate rule, not unique derived
+  dynamics; classical u8 lane distinct from the Q128 state.
 - `dynamics.rounded_stencil_collision` — `.verified`: side-2 rounded
   stencil non-injective (explicit collision pair).
 - `dynamics.rounded_polynomial_basis_control` —

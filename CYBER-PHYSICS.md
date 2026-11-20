@@ -30,6 +30,7 @@ read."
 | Quantum lane | `src/quantum/` | lattice Hamiltonian/evolution/blocks/entanglement/decoherence/measure/octonion-ops/simulator |
 | Behavior probes | `src/quantum_model.zig`, `interference.zig`, `observer.zig` | two-qubit Q32.32 gates, eight-phase interference, squared-amplitude sampling, passive-observer contract |
 | Reversible lane | `src/reversible_probe.zig` | NOT/CNOT/Toffoli/Fredkin/SWAP/Peres, bijection tests, uncompute |
+| Reversible lattice CA | `src/reversible_lattice.zig` | contract v1: octonion-cell (2×2×2) Margolus CA on u8 sites, provably bijective steps, alternating partitions |
 | Adapter | `src/qsharp_adapter.zig` | Q#-vocabulary mapping over the bounded simulator |
 | Serialization | `src/serialize.zig`, `frames.zig`, `routing.zig` | deterministic manifest, frame digests, e0 routing |
 | Claims/audit | `axiom_registry.zig`, `axiom_derivation_audit.zig`, `generative_chain.zig` | statuses, emergence paths, verified algebra/count chain |
@@ -82,9 +83,10 @@ semantics for reproducible simulation, not apparatus observations; items
    populations map the state onto the 8 components + shell channel.
    Which binding (if any) corresponds to a physical i-vector readout
    remains open.
-2. **Lattice-native reversible transition** — the rounded side-2 stencil
-   collision is documented; a globally injective rule derived from the
-   algebraic ladder is open.
+2. **Lattice-native reversible transition** — contract v1 exists
+   (`reversible_lattice.zig`): octonion-cell Margolus CA on u8 sites,
+   provably bijective steps. Whether it is *the* lattice dynamics —
+   versus one candidate among gate/partition choices — remains open.
 3. **Transit-phase selection** — increments 1 and 3 both close mod 8;
    a source equation or physical contract must choose.
 4. **φ/π position→equation bridge** — dimensional-position axioms are
@@ -109,7 +111,8 @@ semantics for reproducible simulation, not apparatus observations; items
 5. E8/Fano relationship and embedding scope — done (overlay verified,
    embedding unsupported-scoped).
 6. φ/π dimensional formalization — open.
-7. Phase and reversible transition contracts — open.
+7. Phase and reversible transition contracts — reversible CA contract
+   v1 done (candidate rule, bijectivity proven); phase selection open.
 8. **Measurement/readout semantics** — software contract v1 done
    (`lattice_measure.zig`); physical mapping open.
 9. Scaling and precision ladder — partially done (metadata + sparse

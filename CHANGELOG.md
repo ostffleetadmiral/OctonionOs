@@ -47,6 +47,13 @@ changed in the engine and documentation, not verdict promotions.
   components plus an explicit shell channel, and label populations
   quantize to i512 via a declared round-half-up convention. Declared
   software semantics; physical i-vector correspondence open.
+- `src/reversible_lattice.zig` — lattice-native reversible transition
+  contract v1: octonion-cell (2×2×2 = 8 sites ↔ e0..e7) Margolus-style
+  CA on u8 sites over the 16³ torus. Cell primitives (swap, rot,
+  add/sub, conditional swap/add/sub) are enforced bijective on
+  (Z/256)⁸ via disjointness constraints, so every step and alternating
+  partition composition has an exact inverse. Declared candidate rule;
+  classical u8 lane distinct from the Q128 lattice state.
 - `src/qsharp_adapter.zig` — Q#-vocabulary adapter over the bounded
   state-vector module (not a Q# runtime).
 - `src/reversible_probe.zig` — classical reversible gates (NOT, CNOT,

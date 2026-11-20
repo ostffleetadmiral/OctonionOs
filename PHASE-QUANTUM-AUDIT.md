@@ -841,3 +841,15 @@ The audit keeps the multi-axiom sets as views of one loop per the user's framing
 **Population quantization.** `populationsToIVector` converts the eight Q128 label weights to i512 by `round_half_up(weight × denom)` for caller-chosen `denom > 0` — a declared rounding convention, exact for populations on the `1/denom` grid, selector-free.
 
 **Boundaries.** Both bindings are declared software semantics: they define what the computational state *says* about the i-vector, not that a physical i-vector is read out. The eight components remain metadata distinct from the amplitudes; no physical correspondence is claimed.
+
+### Lattice-native reversible transition contract v1 — 2026-11-19
+
+`src/reversible_lattice.zig` implements a declared candidate rule for the open "globally injective lattice transition" item, motivated by the documented `dynamics.rounded_stencil_collision` (the rounded side-2 stencil is non-injective on free integer states).
+
+**Construction.** State is `[4096]u8` on the 16³ domain with declared periodic boundary — a classical byte lane, distinct from the Q128 amplitude state. The domain partitions into 512 cells of 2×2×2 = 8 sites, matching the octonion component count; cell-local site index maps to offsets `(s&1, (s>>1)&1, (s>>2)&1)` as the declared e0..e7 ordering. Two staggered partitions (`even` origins, `odd` origins mod 16) both tile the torus; alternating them is the Margolus construction, so information crosses cell boundaries while each step stays a product of disjoint cell maps.
+
+**Bijectivity.** `CellGate` is a bounded primitive sequence. `emit` enforces the disjointness constraints that make every primitive a bijection on (Z/256)⁸: `swap`/`add`/`sub` need distinct sites; `cswap` requires ctrl outside {a,b}; `cadd`/`csub` require ctrl != dst (ctrl == src is legal — src is read-only). Violations (e.g. cadd with ctrl == dst, which collides: +src can carry a nonzero dst to 0 while a zero dst stays 0) are rejected as `InvalidPrim`. Under the constraints, `add`↔`sub`, `cadd`↔`csub`, `rot`↔`unrot`, and swaps are inverse pairs, so `gate.inverse()` exists, every cell map is bijective, every step is bijective, and `runInverse` restores any `run` exactly.
+
+**Tests.** Partition census (every site exactly once per partition, both partitions), exhaustive 256² primitive inverse-pair round-trips plus 2×256² conditional-primitive round-trips, gate/inverse round-trips on structured and seeded cell states, full-domain 16-step alternating run/runInverse restoration, single-excitation transport across cell boundaries, controlled-transfer duplication inside a cell, empty-gate identity, and `cellOf`/`cellSite` round-trip membership.
+
+**Boundaries.** This is ONE declared candidate rule — the gate sequence `gateV1` and the u8/periodic-boundary choices are conventions, not a derived unique physical dynamics. It does not evolve the Q128 lattice state, does not resolve the transit-phase or stencil-collision questions for the quantum lane, and makes no physical claim.
