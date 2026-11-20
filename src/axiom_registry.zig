@@ -88,6 +88,10 @@ pub const NODES = [_]DerivationNode{
         .{ .path = "src/ladder.zig", .note = "CLAIMS id=7 records the spec-derived choice and gauge analysis" },
         .{ .path = "1.md", .note = "Module-2 engineering directive: 'geometric phase accumulation of 3pi/4 per transit with closure at 8 transits'" },
     } },
+    .{ .id = "lattice.phi_pi_position_v1", .system = .generative_bootstrap, .statement = "phi/pi dimensional-position contract v1 (declared positional semantics): pi is centered at E0 (origin site); the state's 1D phi coordinate is carried inward along the six cardinal directions; the 16^3 compounding shell exists only when scaling (bare 15^3 has no shell interactions) and carries the outward phi role. EU/MOUND assign c(1)=phi (1D timeline), c(2)=pi (2D phase space). Position only — no magnitudes, no equation bridge.", .status = .verified_with_correction, .implementation = "phi_pi_position.zig", .verification = "phi_pi_position tests: exact 1/3374/721 role census over unsigned 16^3, 42 cardinal-ray sites on six directions, inward-step direction checks, bare-15^3 shell exclusion", .sources = &.{
+        .{ .path = "src/phi_pi_position.zig" },
+        .{ .path = "1.md", .note = "User-supplied positioning: pi at E0, phi inward on six directions, phi outward scaling; 16^3 only when compounding" },
+    } },
     .{ .id = "system.eu_seven_axioms", .system = .eu_seven_axioms, .statement = "EU seven-axiom set (L=15, 421 observers, Mobius defect 7, octonion/Fano, Fibonacci/H21, 0D-10D ladder, H21 triad): claimed expansion/specialization of the 0^0=i seed — doctrinal reduction, not a verified derivation.", .status = .register, .implementation = "axiom_registry.zig", .verification = "registry edge audit; constituent counts verified separately", .sources = &.{
         .{ .path = "/home/admpaul/Desktop/Ralph/EU/docs/00-axioms.md" },
     } },
@@ -234,6 +238,7 @@ pub const EDGES = [_]DerivationEdge{
     .{ .from = "qbit.lattice_3d", .to = "reversible.register_gates", .kind = "requires" },
     .{ .from = "qbit.lattice_3d", .to = "measurement.lattice_contract", .kind = "provides_readout" },
     .{ .from = "qbit.lattice_3d", .to = "lattice.transit_phase_v1", .kind = "parametrizes" },
+    .{ .from = "lattice.phi_pi_position_v1", .to = "ladder.complex_2d", .kind = "positions" },
     .{ .from = "measurement.lattice_contract", .to = "measurement.ivector_readout", .kind = "binds" },
     .{ .from = "reversible.register_gates", .to = "dynamics.reversible_lattice", .kind = "extends" },
     .{ .from = "dynamics.rounded_stencil_collision", .to = "dynamics.reversible_lattice", .kind = "motivates" },

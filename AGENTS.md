@@ -134,8 +134,17 @@ Preserve these exactly; changing one requires an explicit user decision:
   preserving 15³-cell→E8 embedding is `unsupported` (degree ≤6 vs 56,
   scoped to the named graphs). Equal counts (`15×16=240`, `721=3·240+1`)
   are arithmetic, not geometric ownership.
-- φ/π are dimensional-position axioms from the ladder; the
-  position→equation bridge remains a formalization obligation.
+- φ/π position contract v1 (`phi_pi_position.zig`): π is anchored at
+  E0 (origin site); the state's 1D φ is carried inward along the six
+  cardinal directions; the 16³ compounding shell (any coord == 15,
+  721 sites) carries the outward-φ role and exists only when scaling —
+  the bare 15³ has no shell interactions. The position→equation bridge
+  remains a formalization obligation; no magnitudes are assigned.
+- Compounding law (user-supplied): the 16³ domain matters only when
+  compounding; scaling adds the 16³ layer to every 15³ block. The
+  unsigned 0..15 coordinate frame (interior 0..14, +1 shell faces)
+  is the canonical compounding frame; signed [-7,+7] is the interior
+  description, not a separate domain.
 - Reversibility: the rounded side-2 stencil collision is documented;
   basis-norm preservation is not global injectivity.
   `reversible_lattice.zig` contract v1 is a declared candidate

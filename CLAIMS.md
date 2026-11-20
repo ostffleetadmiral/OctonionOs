@@ -98,6 +98,11 @@ dimensions (bicomplex=4, J3(O)=27, octonions=8).
   global inverse proof.
 - `reversible.register_gates` — `.verified`: permutation gates,
   exhaustive 8-bit bijection, Peres inverse, Bennett uncompute.
+- `lattice.phi_pi_position_v1` — `.verified_with_correction`: declared
+  positional contract — π at E0, φ inward on six cardinal directions,
+  16³ compounding shell (721 sites, any coord == 15) as outward-φ role
+  existing only when scaling; bare 15³ has no shell interactions.
+  Position only; no magnitudes, no equation bridge.
 - Transit phase contract v1: the Module-2 source spec (3π/4 per
   transit) selects increment 3 (`three_quarter_turn_per_transit`) as
   `CANONICAL_PHASE_CONVENTION`; +1 stays as the minimal-generator

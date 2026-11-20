@@ -89,12 +89,15 @@ The hardware dimensional-ladder source explicitly declares the e-slot
 positions (`e1/e3/e5/e7` on `S¹/S³/S⁵/S⁷`, with `e2/e4/e6` transitions) and
 records the sphere-volume π powers and a φ self-similarity rule. The Octonion-OS
 algebraic ladder verifies its own 11 tier-to-algebra associations, but it does
-not currently execute those dimensional-position equations. Thus the source
-supports the user's φ/π position-axiom mapping, while the equation-level
-derivation from the discrete 15→16 position data remains an explicit
-formalization task. The existing source tests also show that the triad's
-exponent constraints are asserted/coded; they do not by themselves derive
-physical constants or units.
+not currently execute those dimensional-position equations. The user's
+positional semantics — π at E0, φ inward on six cardinal directions, φ
+outward through the compounding shell — is now encoded as declared contract
+v1 in `src/phi_pi_position.zig` (roles/directions only; the 16³ shell is the
+compounding layer that exists only when scaling, per the user's compounding
+law). The equation-level derivation from the discrete 15→16 position data
+remains an explicit formalization task. The existing source tests also show
+that the triad's exponent constraints are asserted/coded; they do not by
+themselves derive physical constants or units.
 
 The modulo-8 transit counter retains both increments (`1` and `3`
 eighth-turns); contract v1 now pins `three_quarter_turn_per_transit` as
@@ -265,9 +268,12 @@ The dimensional-ladder source states the φ/π position assignments and checks
 encoded equations. Sphere-volume formulas account for π powers at the named
 odd-sphere tiers. The φ tests establish the asserted self-similarity and
 `φ²=φ+1` relation once the position-to-equation premise is accepted; they do
-not derive that premise from the discrete lattice alone. The evidence
-supports the user's dimensional-position axiom framing, while the specific
-discrete-to-equation bridge remains a formalization obligation. Exact
+not derive that premise from the discrete lattice alone. The user's positional
+framing (π at E0; φ inward on six directions; outward φ scaling through the
+compounding shell) is now a declared positional contract v1
+(`phi_pi_position.zig`, registered `lattice.phi_pi_position_v1`); the
+specific discrete-to-equation bridge remains a formalization obligation.
+Exact
 hardware-source digest for `dimensional_ladder.zig`:
 `20092b3ef5498e96ff41313a9683cd1d83c38ab82571a03d958c1c82c7747969`.
 

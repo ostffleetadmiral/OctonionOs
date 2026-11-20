@@ -162,8 +162,11 @@ is one.
    +1 stays as the minimal-generator variant. Gauge analysis verified:
    +3 is the ×3 mod 8 image of +1 and ×3 is not an octonion
    automorphism. An apparatus contract could still supersede.
-4. **φ/π position→equation bridge** — dimensional-position axioms are
-   recorded; the discrete-to-equation derivation is open.
+4. **φ/π position→equation bridge** — positional contract v1 exists
+   (`phi_pi_position.zig`): π anchored at E0, φ carried inward on the
+   six cardinal directions, the 16³ shell as the outward-φ compounding
+   layer that exists only when scaling (bare 15³ has no shell
+   interactions). The position→equation derivation remains open.
 5. **Larger-tier evolution** — sparse histograms verified through 480³;
    dense 256³/512³ translated-Fano evolution is unvalidated.
 6. **Measurement/collapse semantics** — software contract v1 is
@@ -188,7 +191,8 @@ is one.
 4. Algebraic ladder and axiom registry — done.
 5. E8/Fano relationship and embedding scope — done (overlay verified,
    embedding unsupported-scoped).
-6. φ/π dimensional formalization — open.
+6. φ/π dimensional formalization — position contract v1 done
+   (`phi_pi_position.zig`); the position→equation bridge remains open.
 7. Phase and reversible transition contracts — reversible CA contract
    v1 done (candidate rule, bijectivity proven); phase selection open.
 8. **Measurement/readout semantics** — software contract v1 done

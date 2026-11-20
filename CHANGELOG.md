@@ -8,6 +8,13 @@ changed in the engine and documentation, not verdict promotions.
 
 ### Added
 
+- `src/phi_pi_position.zig` — φ/π dimensional-position contract v1:
+  π anchored at E0, φ carried inward on the six cardinal directions,
+  and the 16³ compounding shell (721 sites, any coord == 15) as the
+  outward-φ role that exists only when scaling — the bare 15³ has no
+  shell interactions. Roles/directions only; the position→equation
+  bridge remains open. Registered as `lattice.phi_pi_position_v1`.
+
 - `AGENTS.md` — governing agent guide for this tree: project law, claims
   discipline, standing invariants, provenance law, retro-dev micro-loop,
   continuity order. Takes precedence over donor-tree agent rules.
