@@ -54,6 +54,17 @@ changed in the engine and documentation, not verdict promotions.
   (Z/256)⁸ via disjointness constraints, so every step and alternating
   partition composition has an exact inverse. Declared candidate rule;
   classical u8 lane distinct from the Q128 lattice state.
+- Transit-phase contract v1 (`lattice.CANONICAL_PHASE_CONVENTION`):
+  the Module-2 source spec ("3π/4 per transit with closure at 8
+  transits") selects `three_quarter_turn_per_transit` (+3 eighth-turns)
+  as canonical; `quarter_turn_per_transit` (+1) remains as the
+  minimal-generator variant. Executable gauge analysis: the +3 sequence
+  is the element-wise ×3 mod 8 image of +1, ×3 is not an octonion
+  automorphism (checked via `octonion.multiply`), and both conventions
+  share cycle invariants (8-step closure, antipode at transit 4,
+  parity alternation). Registry node `lattice.transit_phase_v1` added.
+- `.gitignore` — `externals/` excluded for vendored/read-only donor
+  trees (Q.ANT toolkit appraisal recorded in `CYBER-PHYSICS.md`).
 - `src/qsharp_adapter.zig` — Q#-vocabulary adapter over the bounded
   state-vector module (not a Q# runtime).
 - `src/reversible_probe.zig` — classical reversible gates (NOT, CNOT,

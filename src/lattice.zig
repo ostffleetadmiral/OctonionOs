@@ -1,4 +1,5 @@
 const std = @import("std");
+const octonion = @import("octonion.zig");
 
 pub const SIDE: usize = 15;
 pub const LAYERS: usize = SIDE;
@@ -17,6 +18,18 @@ pub const PhaseConvention = enum(u8) {
         return @intCast(@intFromEnum(self));
     }
 };
+
+/// Declared contract choice v1, selected by source spec: the Module-2
+/// engineering directive (recorded in `1.md`) specifies "geometric
+/// phase accumulation of 3π/4 per transit with closure at 8 transits" —
+/// 3π/4 = 3 eighth-turns, i.e. `.three_quarter_turn_per_transit`.
+/// `.quarter_turn_per_transit` (+1, the minimal generator of Z/8) is
+/// retained as the covering-preimage variant: the +3 sequence is the
+/// element-wise ×3 mod 8 image of the +1 sequence, and ×3 is not an
+/// octonion automorphism, so label-coupled consumers can distinguish
+/// the conventions. The choice is contract metadata (serialization
+/// still requires an explicit convention), not a physical claim.
+pub const CANONICAL_PHASE_CONVENTION: PhaseConvention = .three_quarter_turn_per_transit;
 
 pub const Coord = struct {
     x: i8,
@@ -288,6 +301,56 @@ test "phase conventions are explicit and each closes after eight transits" {
         try std.testing.expect(!visited[0]);
         for (visited[1..]) |seen| try std.testing.expect(seen);
     }
+}
+
+fn sigma3(position: u3) u3 {
+    return @intCast((@as(u8, position) *% 3) % PHASE_STEPS_PER_CYCLE);
+}
+
+test "three-quarter sequence is the sigma3 relabeling of the quarter-turn sequence" {
+    var canonical = Phase{};
+    var dual = Phase{};
+    for (0..PHASE_STEPS_PER_CYCLE) |_| {
+        canonical.transit(.quarter_turn_per_transit);
+        dual.transit(.three_quarter_turn_per_transit);
+        try std.testing.expectEqual(sigma3(canonical.eighth_turns), dual.eighth_turns);
+    }
+}
+
+test "sigma3 relabeling is not an octonion automorphism" {
+    // sigma fixes e0 and permutes the imaginary units; if it were an
+    // algebra automorphism it would preserve products. It does not:
+    // sigma(e1 * e2) = sigma(e3) = e1, but sigma(e1) * sigma(e2) =
+    // e3 * e6 = e5.
+    const product = octonion.multiply(@intCast(sigma3(1)), @intCast(sigma3(2)));
+    try std.testing.expectEqual(@as(octonion.Unit, 5), product.unit);
+    try std.testing.expectEqual(@as(octonion.Unit, 1), sigma3(3));
+    try std.testing.expect(product.unit != sigma3(3));
+}
+
+test "both phase conventions share cycle invariants" {
+    const conventions = [_]PhaseConvention{ .quarter_turn_per_transit, .three_quarter_turn_per_transit };
+    for (conventions) |convention| {
+        var phase = Phase{};
+        var previous: ?u3 = null;
+        for (0..PHASE_STEPS_PER_CYCLE) |step| {
+            phase.transit(convention);
+            if (previous) |prior| {
+                try std.testing.expect((@as(u8, prior) ^ @as(u8, phase.eighth_turns)) & 1 == 1);
+            }
+            previous = phase.eighth_turns;
+            if (step + 1 == 4) try std.testing.expectEqual(@as(u3, 4), phase.eighth_turns);
+        }
+        try std.testing.expectEqual(@as(u3, 0), phase.eighth_turns);
+    }
+}
+
+test "canonical phase convention matches the Module-2 spec increment" {
+    try std.testing.expectEqual(PhaseConvention.three_quarter_turn_per_transit, CANONICAL_PHASE_CONVENTION);
+    try std.testing.expectEqual(@as(u3, 3), CANONICAL_PHASE_CONVENTION.incrementEighthTurns());
+    var phase = Phase{};
+    for (0..4) |_| phase.transit(CANONICAL_PHASE_CONVENTION);
+    try std.testing.expectEqual(@as(u3, 4), phase.eighth_turns);
 }
 
 test "7-defect metadata is explicit and arithmetically defined" {

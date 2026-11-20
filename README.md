@@ -72,14 +72,14 @@ The observer-shift permutation and `(direction XOR observer) mod 3` axis functio
 
 ### Transit phase contract
 
-No transit phase convention is authoritative or implicit. Both candidates are implemented as modulo-8 integer eighth-turn increments:
+Both candidates are implemented as modulo-8 integer eighth-turn increments:
 
 | Convention | Increment | Residues after transits 1–8 |
 |---|---:|---|
 | `quarter_turn_per_transit` | 1 | 1, 2, 3, 4, 5, 6, 7, 0 |
 | `three_quarter_turn_per_transit` | 3 | 3, 6, 1, 4, 7, 2, 5, 0 |
 
-Each sequence returns to zero after eight transits. That arithmetic closure does not adjudicate which physical or architectural interpretation is authoritative. Callers must select a convention for serialization; `null` is rejected. The manifest records the chosen ID, increment, and cycle length. Layer pivot metadata is not transit phase.
+Each sequence returns to zero after eight transits. Contract v1 pins `three_quarter_turn_per_transit` as `lattice.CANONICAL_PHASE_CONVENTION` because the Module-2 source spec specifies 3π/4 per transit (exactly three eighth-turns); `quarter_turn_per_transit` remains as the minimal-generator variant. The +3 sequence is the element-wise ×3 mod 8 image of +1, and ×3 is not an octonion automorphism, so label-coupled consumers can distinguish them. Callers must still select a convention for serialization; `null` is rejected. The manifest records the chosen ID, increment, and cycle length. Layer pivot metadata is not transit phase.
 
 ### Manifest contract
 

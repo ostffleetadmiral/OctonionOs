@@ -98,12 +98,16 @@ dimensions (bicomplex=4, J3(O)=27, octonions=8).
   global inverse proof.
 - `reversible.register_gates` — `.verified`: permutation gates,
   exhaustive 8-bit bijection, Peres inverse, Bennett uncompute.
-- Transit phase: increments 1 and 3 both close mod 8 after eight
-  transits; neither selected; distinct from interference phase.
+- Transit phase contract v1: the Module-2 source spec (3π/4 per
+  transit) selects increment 3 (`three_quarter_turn_per_transit`) as
+  `CANONICAL_PHASE_CONVENTION`; +1 stays as the minimal-generator
+  variant. +3 is the ×3 mod 8 image of +1 and ×3 is not an octonion
+  automorphism; distinct from interference phase.
 
 ## What is NOT claimed
 
 - No physical qbit measurement, no physical randomness, no entanglement
   beyond simulator amplitudes, no 256³/512³ dense evolution, no
-  i-vector↔amplitude projection, no lattice-native global inverse, no
-  selected transit-phase convention, no φ/π position→equation derivation.
+  i-vector↔amplitude projection, no apparatus-level transit-phase
+  derivation beyond the recorded source spec, no φ/π position→equation
+  derivation.

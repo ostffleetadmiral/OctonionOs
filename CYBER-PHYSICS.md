@@ -76,6 +76,75 @@ and non-mutating population/digest readouts. These are declared software
 semantics for reproducible simulation, not apparatus observations; items
 1–8 above still gate any physical lane.
 
+## Candidate apparatus appraisal: Q.ANT native toolkit
+
+`externals/qant_native_computing_toolkit/` (gitignored, read-only donor;
+cloned from `ostffleetadmiral/qant_native_computing_toolkit`) is Q.ANT
+GmbH's Apache-2.0 SDK for Gen2/Gen2p neural processing units — a
+conventional NN *inference* API in Rust with C/Python bridges. Like
+every donor, only its ideas enter this project; the tree stays outside
+git. Appraised through our own contract categories:
+
+**Idea alignments (knowledge import):**
+
+- **Executable-shadow parity** — the `cpu-backend` feature simulates
+  three NPUs (ids 10–12) behind the *same* driver ABI as real hardware.
+  That is exactly our audit model's pattern: an independently verified
+  structure running the same interface as the physical lane. The
+  toolkit demonstrates the shadow/physical parity contract we already
+  use for software-vs-lab evidence classes.
+- **Pipeline shape = our measurement contract** — `upload_weights`
+  (prepare Hamiltonian/parameters once) → `fprop` (evolve per input) →
+  activation/pool (readout). The same prepare/evolve/measure phase
+  separation as `lattice_measure.zig`.
+- **Both our readout semantics exist in their vocabulary** — `maxpool`
+  selects a winner (site-sampling analog); `avgpool`/norm coherently
+  sum weights (population/label-weight analog).
+- **Complex DFT on `[batch, N, 2]` re/im pairs** — structurally the
+  same layout as our `Complex{re,im}` amplitudes flattened over sites;
+  Fourier is the position↔phase instrument, relevant to phase-spectrum
+  readout of lattice states.
+- **`conv_transpose`** — an explicit inverse-direction propagation op;
+  the same adjoint role our `unstep`/`runInverse` plays.
+- **Telemetry as disturbance observables** — 11 voltage rails, 12 V
+  current, perf counters including *stall/idle time* (self-monitoring;
+  the observer-loopback analog). On cpu-backend these are fixed
+  simulated values — matching our evidence-class rule that simulated
+  telemetry is model data, not apparatus data.
+- **Capability flags before measurement** — `QantDeviceCapability`
+  negotiation mirrors our rule that observables must be declared before
+  a measurement contract exists.
+- **Fail-closed discipline** — their clippy config denies
+  `unwrap_used`/`expect_used`/`panic`, the same law as our named-error
+  convention.
+- **bf16 = hardware precision floor** — `Value = bf16` (~3 significant
+  digits) versus Q128.128 (~38). Real hardware defines the *noise
+  floor* any shadow experiment must tolerate; it is the bottom tier of
+  the precision ladder, not a peer of canonical state.
+- **DLPack** — standard tensor interchange (ADR-0003); a transport
+  envelope candidate only. Canonical serialization stays integer-first.
+
+**Boundaries (what does not map):**
+
+- No octonion/Fano/i-vector/15³ semantics — all lattice meaning lives
+  on our side of an adapter we would have to write.
+- Inference-only and irreversible: relu/sigmoid/pooling destroy
+  information. There is no path from this toolkit to
+  `reversible_lattice.zig`; the reversible lane stays integer Zig.
+- bf16 precision wall — hardware output can never feed canonical
+  state; at most a verification/shadow oracle.
+- conv is 2D against our 3D lattice — plane-slicing/reshape
+  approximations only.
+- Rust/C++ cannot enter `src/` under integer-only law — an external
+  process boundary at most.
+
+**Status:** donor knowledge recorded; candidate apparatus *interface*
+for the gated physical lane. The `cpu-backend` permits developing the
+export/transport contract (Q128 amplitudes → bf16 complex pairs → DFT
+spectral readout vs integer reference) with no hardware. Items 1–8 of
+the measurement contract still gate any physical claim; nothing here
+is one.
+
 ## Open elevation paths (software-side, in dependency order)
 
 1. **i-vector ↔ amplitude binding** — declared software contract v1
@@ -87,8 +156,12 @@ semantics for reproducible simulation, not apparatus observations; items
    (`reversible_lattice.zig`): octonion-cell Margolus CA on u8 sites,
    provably bijective steps. Whether it is *the* lattice dynamics —
    versus one candidate among gate/partition choices — remains open.
-3. **Transit-phase selection** — increments 1 and 3 both close mod 8;
-   a source equation or physical contract must choose.
+3. **Transit-phase selection** — resolved at contract level: the
+   Module-2 source spec (3π/4 per transit) selects increment 3
+   (`three_quarter_turn_per_transit`) as `CANONICAL_PHASE_CONVENTION`;
+   +1 stays as the minimal-generator variant. Gauge analysis verified:
+   +3 is the ×3 mod 8 image of +1 and ×3 is not an octonion
+   automorphism. An apparatus contract could still supersede.
 4. **φ/π position→equation bridge** — dimensional-position axioms are
    recorded; the discrete-to-equation derivation is open.
 5. **Larger-tier evolution** — sparse histograms verified through 480³;
@@ -100,6 +173,11 @@ semantics for reproducible simulation, not apparatus observations; items
 7. **QComms donor propagation** — labeling version 2 lives in this tree;
    updating the donor QComms implementation + manifest is a separate
    retro-dev decision.
+8. **Hardware shadow adapter (Q.ANT cpu-backend)** — develop the
+   export/transport contract and a DFT spectral-readout oracle against
+   the integer reference, all quarantined as verification lane. Real
+   Gen2/Gen2p hardware would additionally need the full measurement
+   contract (items 1–8) before any physical claim.
 
 ## Roadmap
 

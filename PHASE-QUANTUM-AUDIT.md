@@ -96,11 +96,12 @@ formalization task. The existing source tests also show that the triad's
 exponent constraints are asserted/coded; they do not by themselves derive
 physical constants or units.
 
-The current modulo-8 transit counter deliberately retains both increments
-(`1` and `3` eighth-turns). Each sequence has period eight, but closure does
-not select which convention applies to a particular physical process. The
-counter is distinct from the complex phase rotation in the two-path
-interference probe.
+The modulo-8 transit counter retains both increments (`1` and `3`
+eighth-turns); contract v1 now pins `three_quarter_turn_per_transit` as
+`CANONICAL_PHASE_CONVENTION` because the Module-2 source spec specifies
+3π/4 per transit, while `quarter_turn_per_transit` remains as the
+minimal-generator variant. The counter is distinct from the complex
+phase rotation in the two-path interference probe.
 
 The reversible-dynamics evidence is likewise candidate-specific. The directed
 `+1 mod 8` adjacency map sends one origin basis state to four sites and raises
@@ -277,7 +278,8 @@ polynomial returns the origin basis control unchanged; and the Q128
 Chebyshev propagator has measured, finite truncation/norm/reversibility
 bounds. These are separate candidates and do not establish a universal
 reversibility verdict. Transit phase increments 1 and 3 both close after
-eight steps, but remain unselected and are not the interference phase API.
+eight steps; contract v1 selects increment 3 via the Module-2 source
+spec (3π/4 per transit) and is not the interference phase API.
 
 The already-recorded failed first-three-coordinates mod-15 candidate and
 the degree bound (15³ e0 graph degree ≤6 versus E8 minimum-distance degree
@@ -376,9 +378,12 @@ Expected sequences from phase zero are:
 | 1 | 1, 2, 3, 4, 5, 6, 7, 0 | 8 | 8 |
 | 3 | 3, 6, 1, 4, 7, 2, 5, 0 | 8 | 8 |
 
-These are arithmetic properties. They neither choose the authoritative
-physical phase convention nor determine Born probabilities. Neither transit
-convention is currently selected as authoritative.
+These are arithmetic properties. They neither determine Born
+probabilities nor constitute a physical-phase derivation. Contract v1
+selects increment 3 as canonical because the Module-2 engineering
+directive specifies 3π/4 per transit; the gauge analysis (the +3
+sequence is the element-wise ×3 mod 8 image of +1, and ×3 is not an
+octonion automorphism) is code-checked in `lattice.zig`.
 
 ### Fixed-point Bell/gate model
 
@@ -853,3 +858,39 @@ The audit keeps the multi-axiom sets as views of one loop per the user's framing
 **Tests.** Partition census (every site exactly once per partition, both partitions), exhaustive 256² primitive inverse-pair round-trips plus 2×256² conditional-primitive round-trips, gate/inverse round-trips on structured and seeded cell states, full-domain 16-step alternating run/runInverse restoration, single-excitation transport across cell boundaries, controlled-transfer duplication inside a cell, empty-gate identity, and `cellOf`/`cellSite` round-trip membership.
 
 **Boundaries.** This is ONE declared candidate rule — the gate sequence `gateV1` and the u8/periodic-boundary choices are conventions, not a derived unique physical dynamics. It does not evolve the Q128 lattice state, does not resolve the transit-phase or stencil-collision questions for the quantum lane, and makes no physical claim.
+
+### Transit-phase contract v1 and Q.ANT apparatus appraisal — 2026-11-20
+
+**Transit-phase selection.** The open "increments 1 vs 3" question resolved
+at contract level: the Module-2 engineering directive recorded in `1.md`
+specifies "geometric phase accumulation of 3π/4 per transit with closure
+at 8 transits." 3π/4 is exactly three eighth-turns, so
+`three_quarter_turn_per_transit` is the spec-conformant convention and is
+pinned as `lattice.CANONICAL_PHASE_CONVENTION`; `quarter_turn_per_transit`
+(+1, the minimal Z/8 generator) remains selectable. Executable gauge
+analysis added to `lattice.zig`: the +3 sequence is the element-wise ×3
+mod 8 image of the +1 sequence; ×3 is *not* an octonion automorphism
+(verified via `octonion.multiply` — σ(e1·e2)=e1 but σe1·σe2=e5), so
+label-coupled consumers can distinguish the conventions; both share
+8-step closure, the antipode at transit 4, and parity alternation. The
+selection is contract metadata following the recorded source spec, not a
+physical claim; serialization still requires explicit selection.
+Registry node `lattice.transit_phase_v1` added.
+
+**Q.ANT native toolkit appraisal.** `externals/qant_native_computing_toolkit`
+(gitignored read-only donor; Q.ANT GmbH's Apache-2.0 Gen2/Gen2p NPU
+inference SDK, Rust + C/Python bridges) was appraised through our contract
+categories — full analysis in `CYBER-PHYSICS.md`. Alignments recorded:
+cpu-backend simulated drivers mirror our executable-shadow pattern;
+upload→fprop→activate mirrors prepare→evolve→measure; maxpool/avgpool
+cover our site-sampling and population readout semantics; complex DFT on
+re/im pairs is a candidate amplitude-spectral readout; conv_transpose is
+an adjoint-direction analog; telemetry rails/current/stall-counters are
+disturbance-protocol observables; capability flags mirror observable
+declaration; clippy-denied unwrap/panic mirrors fail-closed law; bf16 is
+the hardware precision floor. Boundaries: no octonion/Fano/i-vector/15³
+semantics, inference-only irreversibility (no path to
+`reversible_lattice.zig`), bf16-vs-Q128 precision wall, 2D conv vs 3D
+lattice, Rust/C++ cannot enter `src/`. Status: candidate apparatus
+*interface* for the gated physical lane; cpu-backend permits shadow-adapter
+development without hardware. No physical claim.

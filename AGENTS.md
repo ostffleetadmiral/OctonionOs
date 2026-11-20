@@ -122,9 +122,14 @@ Preserve these exactly; changing one requires an explicit user decision:
   deterministic u64 draws (`maxInt(u64)` rejected); `measureLabel` is a
   Lüders projection plus renormalization. These are declared software
   semantics, not apparatus validation.
-- Both transit-phase conventions (increments 1 and 3 eighth-turns) stay
-  selectable; eight-step closure does not choose one. They are distinct
-  from the interference-phase API.
+- Transit-phase contract v1 (`lattice.CANONICAL_PHASE_CONVENTION`):
+  `three_quarter_turn_per_transit` (+3 eighth-turns = 3π/4 per the
+  Module-2 source spec in `1.md`) is canonical; `quarter_turn_per_
+  transit` (+1) stays as the minimal-generator variant. The +3 sequence
+  is the element-wise ×3 mod 8 image of +1; ×3 is not an octonion
+  automorphism, so label-coupled consumers can distinguish them.
+  Serialization still requires explicit selection. Distinct from the
+  interference-phase API.
 - E8: the 240-root octavian overlay is verified; the direct adjacency-
   preserving 15³-cell→E8 embedding is `unsupported` (degree ≤6 vs 56,
   scoped to the named graphs). Equal counts (`15×16=240`, `721=3·240+1`)

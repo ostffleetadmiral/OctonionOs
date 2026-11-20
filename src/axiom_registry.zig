@@ -83,6 +83,11 @@ pub const NODES = [_]DerivationNode{
         .{ .path = "src/qcomms_lattice.zig", .note = "LABELING_VERSION = 2; legacyDigest preserves historical version-1 digest" },
         .{ .path = "src/redox_fano_spec.zig", .note = "Exhaustive canonical alignment and legacy histogram tests" },
     } },
+    .{ .id = "lattice.transit_phase_v1", .system = .generative_bootstrap, .statement = "Transit-phase contract v1: three_quarter_turn_per_transit (+3 eighth-turns = 3pi/4 per the Module-2 source spec recorded in 1.md) is the declared canonical convention; quarter_turn_per_transit (+1, minimal Z/8 generator) is retained as the covering-preimage variant. The +3 sequence is the element-wise sigma3 image of the +1 sequence; sigma3 is not an octonion automorphism, so label-coupled consumers can distinguish the conventions. Contract metadata following the source spec, not a physical claim.", .status = .verified_with_correction, .implementation = "lattice.zig", .verification = "lattice tests: sigma3 gauge relation, non-automorphism check via octonion.multiply, shared cycle invariants (antipode at transit 4, parity alternation), canonical constant pinned to the spec increment", .sources = &.{
+        .{ .path = "src/lattice.zig" },
+        .{ .path = "src/ladder.zig", .note = "CLAIMS id=7 records the spec-derived choice and gauge analysis" },
+        .{ .path = "1.md", .note = "Module-2 engineering directive: 'geometric phase accumulation of 3pi/4 per transit with closure at 8 transits'" },
+    } },
     .{ .id = "system.eu_seven_axioms", .system = .eu_seven_axioms, .statement = "EU seven-axiom set (L=15, 421 observers, Mobius defect 7, octonion/Fano, Fibonacci/H21, 0D-10D ladder, H21 triad): claimed expansion/specialization of the 0^0=i seed — doctrinal reduction, not a verified derivation.", .status = .register, .implementation = "axiom_registry.zig", .verification = "registry edge audit; constituent counts verified separately", .sources = &.{
         .{ .path = "/home/admpaul/Desktop/Ralph/EU/docs/00-axioms.md" },
     } },
@@ -228,6 +233,7 @@ pub const EDGES = [_]DerivationEdge{
     .{ .from = "scaling.precision_ladder", .to = "qbit.lattice_3d", .kind = "implements" },
     .{ .from = "qbit.lattice_3d", .to = "reversible.register_gates", .kind = "requires" },
     .{ .from = "qbit.lattice_3d", .to = "measurement.lattice_contract", .kind = "provides_readout" },
+    .{ .from = "qbit.lattice_3d", .to = "lattice.transit_phase_v1", .kind = "parametrizes" },
     .{ .from = "measurement.lattice_contract", .to = "measurement.ivector_readout", .kind = "binds" },
     .{ .from = "reversible.register_gates", .to = "dynamics.reversible_lattice", .kind = "extends" },
     .{ .from = "dynamics.rounded_stencil_collision", .to = "dynamics.reversible_lattice", .kind = "motivates" },
