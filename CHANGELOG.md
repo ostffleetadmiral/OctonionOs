@@ -42,6 +42,11 @@ changed in the engine and documentation, not verdict promotions.
   Lüders label projection with renormalization, non-mutating
   population/digest readouts. Declared software semantics; physical
   apparatus mapping remains gated.
+- `src/ivector_readout.zig` — i-vector ↔ amplitude binding contract v1:
+  site-sample shot histograms classify into the eight e-label
+  components plus an explicit shell channel, and label populations
+  quantize to i512 via a declared round-half-up convention. Declared
+  software semantics; physical i-vector correspondence open.
 - `src/qsharp_adapter.zig` — Q#-vocabulary adapter over the bounded
   state-vector module (not a Q# runtime).
 - `src/reversible_probe.zig` — classical reversible gates (NOT, CNOT,

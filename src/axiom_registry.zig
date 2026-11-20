@@ -180,6 +180,11 @@ pub const NODES = [_]DerivationNode{
         .{ .path = "src/lattice_measure.zig" },
         .{ .path = "src/lattice_qbit.zig", .note = "state domain and population APIs consumed by the contract" },
     } },
+    .{ .id = "measurement.ivector_readout", .system = .generative_bootstrap, .statement = "i-vector ↔ lattice-state binding contract v1: site-sample shots classify into the eight e-label components plus an explicit shell channel (shell is not forced into the 8 components), and label populations quantize to i512 via a declared round-half-up convention. Declared software semantics — the physical i-vector correspondence remains an open evidence question.", .status = .verified_with_correction, .implementation = "ivector_readout.zig", .verification = "ivector_readout tests: pure-label and pure-shell histograms, seed determinism, digest stability, non-mutation, quantization rounding, fail-closed edges", .sources = &.{
+        .{ .path = "src/ivector_readout.zig" },
+        .{ .path = "src/lattice_measure.zig", .note = "sampling/classification primitives consumed by the binding" },
+        .{ .path = "src/redox_information_vector.zig", .note = "8-component i512 vector type reused as the readout record" },
+    } },
     .{ .id = "dynamics.rounded_stencil_collision", .system = .redox_standard, .statement = "The side-2 integer rounded Cayley stencil is non-injective: two distinct input vectors produce the same rounded output.", .status = .verified, .implementation = "lattice_hamiltonian_probe.zig", .verification = "Exact regression vectors in the side-2 rounded-polynomial collision test", .sources = &.{
         .{ .path = "src/lattice_hamiltonian_probe.zig", .note = "Specific rounded stencil only; does not establish that every exact or lattice-native evolution is non-injective" },
     } },
@@ -219,6 +224,7 @@ pub const EDGES = [_]DerivationEdge{
     .{ .from = "scaling.precision_ladder", .to = "qbit.lattice_3d", .kind = "implements" },
     .{ .from = "qbit.lattice_3d", .to = "reversible.register_gates", .kind = "requires" },
     .{ .from = "qbit.lattice_3d", .to = "measurement.lattice_contract", .kind = "provides_readout" },
+    .{ .from = "measurement.lattice_contract", .to = "measurement.ivector_readout", .kind = "binds" },
     .{ .from = "reversible.register_gates", .to = "axiom.0pow0_eq_i", .kind = "returns_to" },
     .{ .from = "claims.zero_free_parameters", .to = "axiom.0pow0_eq_i", .kind = "scopes" },
     .{ .from = "ladder.octonion_7d", .to = "e8.octavian_overlay", .kind = "lifts_to" },

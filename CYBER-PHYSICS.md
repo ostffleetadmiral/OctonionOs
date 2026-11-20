@@ -26,6 +26,7 @@ read."
 | Canonical lattice | `src/lattice.zig` | 15³ tensor, signed coords, census, mirror, rays, invariants |
 | Lattice qbit | `src/lattice_qbit.zig` | 4,096-site Q128 state, Hamiltonian, Chebyshev evolution, interior prep, population accounting, deterministic peak readout |
 | Measurement contract | `src/lattice_measure.zig` | software readout v1: selector Born sampling over all 4,096 sites, interior e-label class sampling, site collapse, Lüders label projection, population/digest readouts |
+| i-vector binding | `src/ivector_readout.zig` | declared binding v1: shot histogram → 8 e-components + shell channel; population quantization → i512; software semantics only |
 | Quantum lane | `src/quantum/` | lattice Hamiltonian/evolution/blocks/entanglement/decoherence/measure/octonion-ops/simulator |
 | Behavior probes | `src/quantum_model.zig`, `interference.zig`, `observer.zig` | two-qubit Q32.32 gates, eight-phase interference, squared-amplitude sampling, passive-observer contract |
 | Reversible lane | `src/reversible_probe.zig` | NOT/CNOT/Toffoli/Fredkin/SWAP/Peres, bijection tests, uncompute |
@@ -76,9 +77,11 @@ semantics for reproducible simulation, not apparatus observations; items
 
 ## Open elevation paths (software-side, in dependency order)
 
-1. **i-vector ↔ amplitude binding** — define how the 8-component
-   signed-integer i-vector relates to the 4,096 complex amplitudes
-   (projection, readout basis, or distinct roles). Currently metadata.
+1. **i-vector ↔ amplitude binding** — declared software contract v1
+   exists (`ivector_readout.zig`): shot histograms and quantized
+   populations map the state onto the 8 components + shell channel.
+   Which binding (if any) corresponds to a physical i-vector readout
+   remains open.
 2. **Lattice-native reversible transition** — the rounded side-2 stencil
    collision is documented; a globally injective rule derived from the
    algebraic ladder is open.

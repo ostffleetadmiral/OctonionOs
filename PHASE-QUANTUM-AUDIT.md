@@ -831,3 +831,13 @@ The audit keeps the multi-axiom sets as views of one loop per the user's framing
 **Collapse.** `measureSite` collapses psi to the sampled basis site. `measureLabel` performs the Lüders projection onto the sampled label's interior subspace and renormalizes to unit norm; shell amplitude is projected out because shell sites belong to no label eigenspace. `collapseToLabel` is two-pass: an empty class fails before psi is touched. A repeated label draw on the collapsed state returns the same class (absorbing outcome, tested).
 
 **Boundaries.** This defines software measurement semantics only. It does not map lattice amplitudes to the eight-component i-vector, does not bind any physical apparatus observable, and does not make seeded selectors physical randomness. The physical measurement gate in `CYBER-PHYSICS.md` (state variable, apparatus, calibration, controls, thresholds, artifact schema, authorization) remains closed.
+
+### i-vector ↔ amplitude binding contract v1 — 2026-11-19
+
+`src/ivector_readout.zig` declares the software binding between the framework's 8-component signed-integer i-vector and the lattice state's 4,096 complex amplitudes, closing the "currently metadata" gap at the contract level (physical correspondence remains open).
+
+**Shot readout.** `runIVectorShots` classifies each pure `sampleSite` draw via `describeSite`: interior hits increment the matching e-label component of `redox_information_vector.Vector` (8×i512), shell hits increment `shell_events`. Contract v1 keeps the i-vector at exactly eight components — shell/foam events are auxiliary metadata, never folded into e0..e7. Sampling is non-mutating and deterministic under `SelectorStream` seeds; `readoutDigest` seals the record. Projective repeated measurement on one state is not simulated (a collapsed state re-samples its own outcome — absorbing, per contract v1 of `lattice_measure.zig`).
+
+**Population quantization.** `populationsToIVector` converts the eight Q128 label weights to i512 by `round_half_up(weight × denom)` for caller-chosen `denom > 0` — a declared rounding convention, exact for populations on the `1/denom` grid, selector-free.
+
+**Boundaries.** Both bindings are declared software semantics: they define what the computational state *says* about the i-vector, not that a physical i-vector is read out. The eight components remain metadata distinct from the amplitudes; no physical correspondence is claimed.

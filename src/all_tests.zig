@@ -43,6 +43,7 @@ comptime {
     _ = @import("generative_chain.zig");
     _ = @import("lattice_qbit.zig");
     _ = @import("lattice_measure.zig");
+    _ = @import("ivector_readout.zig");
     _ = @import("quantum_behavior_probe.zig");
     _ = @import("quantum/gates.zig");
     _ = @import("quantum/lattice_blocks.zig");

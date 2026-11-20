@@ -82,6 +82,10 @@ dimensions (bicomplex=4, J3(O)=27, octonions=8).
   software readout contract v1 implemented and tested (site + label
   observables, deterministic selectors, collapse semantics); physical
   apparatus mapping remains open.
+- `measurement.ivector_readout` — `.verified_with_correction`:
+  declared software binding v1 (shot histogram → 8 e-components +
+  shell channel; population quantization → i512); physical
+  i-vector correspondence open.
 - `dynamics.rounded_stencil_collision` — `.verified`: side-2 rounded
   stencil non-injective (explicit collision pair).
 - `dynamics.rounded_polynomial_basis_control` —

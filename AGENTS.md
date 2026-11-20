@@ -111,7 +111,10 @@ Preserve these exactly; changing one requires an explicit user decision:
   `legacyDigest` preserve version-1 reproduction. Never silently
   reinterpret a historical digest.
 - The 8 signed-integer i-vector components are metadata, NOT the 4,096
-  state amplitudes. No projection between them is established.
+  state amplitudes. `ivector_readout.zig` declares software binding v1
+  (shot histogram → 8 components + shell channel; population
+  quantization → i512); it is a declared convention, not a physical
+  projection claim.
 - Measurement contract v1 (`src/lattice_measure.zig`): the site
   observable covers all 4,096 sites; the e-label observable covers the
   eight interior classes only — shell sites belong to no label
