@@ -114,7 +114,7 @@ separate semantic/operational bridge.
 
 The Euqinom `science_ivector.zig` closed form is exhaustively matched by the
 donor's `redox_fano_spec.zig` specification test against `basisAt`; the
-Octonion-OS translated tensor is populated by that `basisAt` rule. Together,
+QComms-canonical coloring is populated by that `basisAt` rule. Together,
 these checks establish the canonical formula correspondence through an
 executable chain. QComms is now aligned: `qcomms_lattice.state` delegates to
 the canonical `basisAt` rule and `LABELING_VERSION` is 2. Its previous formula
@@ -139,11 +139,12 @@ remains an explicit formalization task. The existing source tests also show
 that the triad's exponent constraints are asserted/coded; they do not by
 themselves derive physical constants or units.
 
-The modulo-8 transit counter retains both increments (`1` and `3`
-eighth-turns); contract v1 now pins `three_quarter_turn_per_transit` as
-`CANONICAL_PHASE_CONVENTION` because the Module-2 source spec specifies
-3π/4 per transit, while `quarter_turn_per_transit` remains as the
-minimal-generator variant. The counter is distinct from the complex
+The modulo-8 transit counter retains the complete U(8) increment family
+(`1`, `3`, `5`, `7` eighth-turns); contract v1 now pins
+`three_quarter_turn_per_transit` as `CANONICAL_PHASE_CONVENTION` because
+the Module-2 source spec specifies 3π/4 per transit, while
+`quarter_turn_per_transit` remains as the minimal-generator variant.
+The counter is distinct from the complex
 phase rotation in the two-path interference probe.
 
 ## Image-informed lattice and ladder audit
@@ -536,7 +537,8 @@ embedding of the 15³ cells into those roots.
 
 The Euqinom closed-form labeling and the Octonion-OS translated Fano tensor
 are confirmed as the same 15³ coloring by the exhaustive layer-spec versus
-`basisAt` test and the canonical lattice constructor. QComms is now aligned:
+`basisAt` test. (Branch note: `Lattice.init` is a separate valid coloring —
+see §Convention-superposition audit — not the basisAt constructor.) QComms is now aligned:
 `qcomms_lattice.state` delegates to the canonical `basisAt` rule and
 `LABELING_VERSION` is 2. The previous formula remains as
 `legacyState`/`legacyDigest` for reproducing version-1 runs; it disagrees on
@@ -661,12 +663,16 @@ A focused next test should remain separate from existing 15³ labels and phase:
 
 ### Existing transit-phase field
 
-The lattice has two explicitly selectable integer increments modulo eight:
-`quarter_turn_per_transit` adds 1 eighth-turn unit and
-`three_quarter_turn_per_transit` adds 3. Both return to zero after eight
-transits. Serialization requires explicit selection. This field is cyclic
-bookkeeping, not itself an amplitude, state vector, probability law,
-measurement, or interference model.
+The lattice has four explicitly selectable integer increments modulo eight —
+the complete unit group U(8) = {1,3,5,7}:
+`quarter_turn_per_transit` adds 1 eighth-turn unit,
+`three_quarter_turn_per_transit` adds 3,
+`five_quarter_turn_per_transit` adds 5, and
+`seven_quarter_turn_per_transit` adds 7. All return to zero after eight
+transits; +5/+7 are the reversal images of +3/+1, and even increments
+are excluded sub-cycles. Serialization requires explicit selection. This
+field is cyclic bookkeeping, not itself an amplitude, state vector,
+probability law, measurement, or interference model.
 
 Expected sequences from phase zero are:
 
@@ -674,6 +680,8 @@ Expected sequences from phase zero are:
 |---:|---|---:|---:|
 | 1 | 1, 2, 3, 4, 5, 6, 7, 0 | 8 | 8 |
 | 3 | 3, 6, 1, 4, 7, 2, 5, 0 | 8 | 8 |
+| 5 | 5, 2, 7, 4, 1, 6, 3, 0 | 8 | 8 |
+| 7 | 7, 6, 5, 4, 3, 2, 1, 0 | 8 | 8 |
 
 These are arithmetic properties. They neither determine Born
 probabilities nor constitute a physical-phase derivation. Contract v1
@@ -1130,7 +1138,7 @@ The framework further interprets `i` in `0^0=i` as itself remaining in superposi
 
 `src/axiom_derivation_audit.zig` performs the per-axiom audit across the full corpus inventory (EU A1–A7 shared with Qstar vX and Euqinom v11, Qstar-llm implementation axioms A1–A7, MOUND A1–A8, Euqinom v11.1 AXIOM 0 plus its 25-module concept chain, downbeat first-principles inputs, RamseyIdentity P-237–P-239, and the TheUE/ChiralMath record). The audit was revised after the primitive tree reading was rejected: the framework is a **loop, not a tree**.
 
-**Flipped structure.** The i-vector `i = [e0^i,…,e7^i]` (8 components, not the complex imaginary unit) is primal — postulated, not derived. `0^0 = i` is a **fixed point on the loop**: the origin operation returns the full vector (self-reference). Its executable shadows verify — e0 is the octonion multiplicative identity and the phase cycle closes after exactly 8 transits under both conventions (`8^i = i` as phase arithmetic). The identification of the empty product with the vector remains a definitional convention (`.register`); `0^0=i` is not a theorem of the octonion algebra, where `0^0 = 1 = e0`. Euqinom AXIOM 0 (`0≠1`) is the complementary shadow: distinction makes the 8 components countable. MOUND's "0 free parameters" chain is a **second, parallel loop** rooted in mathematical theorems (Hurwitz→𝕆→E8→240→L=15→P=8→δ=7) — internally zero-parameter, but it neither generates nor is generated by the i-vector loop; the two share the lattice counts.
+**Flipped structure.** The i-vector `i = [e0^i,…,e7^i]` (8 components, not the complex imaginary unit) is primal — postulated, not derived. `0^0 = i` is a **fixed point on the loop**: the origin operation returns the full vector (self-reference). Its executable shadows verify — e0 is the octonion multiplicative identity and the phase cycle closes after exactly 8 transits under the complete U(8) convention family (`8^i = i` as phase arithmetic). The identification of the empty product with the vector remains a definitional convention (`.register`); `0^0=i` is not a theorem of the octonion algebra, where `0^0 = 1 = e0`. Euqinom AXIOM 0 (`0≠1`) is the complementary shadow: distinction makes the 8 components countable. MOUND's "0 free parameters" chain is a **second, parallel loop** rooted in mathematical theorems (Hurwitz→𝕆→E8→240→L=15→P=8→δ=7) — internally zero-parameter, but it neither generates nor is generated by the i-vector loop; the two share the lattice counts.
 
 **Checksum and ladder constants (expanded).** The checksum palindrome `E=mc² ↔ i ↔ E=mc⁻²` is centered on the i-vector, so at this loop's fixed point its pivot is `i = 0⁰`. Independent source paths include hardware `checksum_6d.zig` (e7 pivot, exponent cancellation, Möbius round-trip, mass conservation) and RedOx's integer algebraic checksum. The invariant is supported by arithmetic/algebraic verification; the semantic correspondence between that pivot and the i-vector is tracked separately.
 
@@ -1192,11 +1200,15 @@ specifies "geometric phase accumulation of 3π/4 per transit with closure
 at 8 transits." 3π/4 is exactly three eighth-turns, so
 `three_quarter_turn_per_transit` is the spec-conformant convention and is
 pinned as `lattice.CANONICAL_PHASE_CONVENTION`; `quarter_turn_per_transit`
-(+1, the minimal Z/8 generator) remains selectable. Executable gauge
+(+1, the minimal Z/8 generator) remains selectable. The convention family
+was later completed to the full unit group U(8) — `+5` and `+7` are the
+negated/reversal images of `+3`/`+1` and also close at 8 transits; even
+increments are excluded sub-cycles (see §Convention-superposition audit).
+Executable gauge
 analysis added to `lattice.zig`: the +3 sequence is the element-wise ×3
 mod 8 image of the +1 sequence; ×3 is *not* an octonion automorphism
 (verified via `octonion.multiply` — σ(e1·e2)=e1 but σe1·σe2=e5), so
-label-coupled consumers can distinguish the conventions; both share
+label-coupled consumers can distinguish the conventions; all share
 8-step closure, the antipode at transit 4, and parity alternation. The
 selection is contract metadata following the recorded source spec, not a
 physical claim; serialization still requires explicit selection.

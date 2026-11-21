@@ -63,7 +63,11 @@ real consumer exists.
 - `README.md` — user-facing architecture and contracts.
 - `PHASE-QUANTUM-AUDIT.md` — evidence ledger, donor inventory, physical
   boundary, open questions.
-- `1.md` — working notes.
+- `1.md` — working notes: verbatim historical engineering directives
+  (provenance), the live spec sections at the top, then dated append
+  notes mirroring major findings. `PHASE-QUANTUM-AUDIT.md` is the
+  evidence ledger — the same findings land in both, dated in 1.md and
+  ledger-styled in PHASE-QUANTUM-AUDIT; keep the mirror consistent.
 
 ## Code law
 
@@ -107,10 +111,13 @@ Preserve these exactly; changing one requires an explicit user decision:
 - Label census `[421, 422, 422, 422, 422, 422, 422, 422]`; signed origin
   `(0,0,0)` = index `(7,7,7)` = e0. `prepareUniformInterior` does not
   normalize caller amplitude (norm = `3375·|amp|²`).
-- Canonical coloring is `basisAt` in `redox_scaling_tiers.zig`. QComms
-  `state()` is `LABELING_VERSION = 2`, aligned to it; `legacyState` /
-  `legacyDigest` preserve version-1 reproduction. Never silently
-  reinterpret a historical digest.
+- `basisAt` in `redox_scaling_tiers.zig` is the canonical coloring for
+  the QComms lane: `state()` is `LABELING_VERSION = 2`, aligned to it;
+  `legacyState` / `legacyDigest` preserve version-1 reproduction.
+  Under the superposition law three colorings share the census —
+  the qbit label observable, frames, serialize, and routing read the
+  `Lattice.init` branch (see the pipeline-continuity rule below).
+  Never silently reinterpret a historical digest.
 - The 8 signed-integer i-vector components are metadata, NOT the 4,096
   state amplitudes. `ivector_readout.zig` declares software binding v1
   (shot histogram → 8 components + shell channel; population
@@ -281,3 +288,7 @@ decision point and ask for the source/equation.
 | `src/qsharp_adapter.zig` | Q#-vocabulary adapter (not a runtime) |
 | `src/reversible_probe.zig` | classical reversible gates |
 | `src/e2e_continuity_probe.zig` | 17-seam pipeline continuity audit |
+| `src/redox_sedenion.zig` | Cayley-Dickson e8 double (superposition sibling) |
+| `src/image_claims_probe.zig` | image/diagram claims vs executable checks |
+| `src/lattice_constant_audit.zig` | scale-0..7 native-constant screen |
+| `src/hydrogen_alignment_probe.zig` | hydrogen 1s spatial alignment probe |

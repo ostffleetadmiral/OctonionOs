@@ -4,7 +4,12 @@ All notable changes to the Octonion-OS lattice engine. The canonical
 claim/evidence ledger is `src/axiom_registry.zig`; this file records what
 changed in the engine and documentation, not verdict promotions.
 
-## Unreleased — standalone transition and QComms alignment
+## e6ddb9b — Audit e2e continuity; restore superposed instances; screen image claims
+
+This section covers the work arc since `cad6b47` — the standalone
+transition, QComms alignment, contract v1s, scale audits, the
+superposition law, and the e2e continuity audit — all committed in
+`e6ddb9b`.
 
 ### Added
 
