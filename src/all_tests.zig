@@ -13,6 +13,8 @@ comptime {
     _ = @import("lattice_quantum_probe.zig");
     _ = @import("lattice_hamiltonian_probe.zig");
     _ = @import("h21_lattice_probe.zig");
+    _ = @import("hydrogen_alignment_probe.zig");
+    _ = @import("lattice_constant_audit.zig");
     _ = @import("reversible_probe.zig");
     _ = @import("fixed_point.zig");
     _ = @import("octonion.zig");
@@ -32,6 +34,7 @@ comptime {
     _ = @import("redox_octonion.zig");
     _ = @import("redox_scaling_audit.zig");
     _ = @import("redox_scaling_tiers.zig");
+    _ = @import("redox_sedenion.zig");
     _ = @import("redox_sonoluminescence.zig");
     _ = @import("redox_temporal_models.zig");
     _ = @import("redox_tier_pipeline.zig");
@@ -47,6 +50,8 @@ comptime {
     _ = @import("reversible_lattice.zig");
     _ = @import("phi_pi_position.zig");
     _ = @import("mound_triad.zig");
+    _ = @import("image_claims_probe.zig");
+    _ = @import("e2e_continuity_probe.zig");
     _ = @import("quantum_behavior_probe.zig");
     _ = @import("quantum/gates.zig");
     _ = @import("quantum/lattice_blocks.zig");

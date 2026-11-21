@@ -2,6 +2,35 @@
 
 Standalone Zig 0.13.0 project for an integer-first 15³ signed-coordinate lattice, a translated Fano label tensor, a quantized Quad-Smith table, sparse scaling metadata, and deterministic JSON export. Agent rules and project law live in `AGENTS.md`.
 
+`src/hydrogen_alignment_probe.zig` implements the hydrogen 1s Coulomb
+spatial solution in Q128 integer arithmetic on the E0-centered 15³ interior,
+including discrete normalization and a central 2D density slice. Its
+Bohr-radius-to-lattice scale is not physically calibrated; the 21 cm
+hyperfine spin flip is kept distinct from the unchanged spatial state.
+The H21 triad's positional reading is π²-centered at E0, with φ⁵ as the
+outer reading and φ⁻⁴ as the inner reading. The ladder's e3
+(`H21,H21,H21`) and e6 (`21cm,21cm,21cm`) endpoints are also retained:
+the additive e6 correction `21 cm + 7/66 cm = 21.1060606… cm` is tied
+to that same ladder structure. The same additive correction is evaluated
+on the full triad as its e3→e6 candidate, with the residual against the
+measured endpoint retained; it is a connected geometric path, not an
+assumption that both starting magnitudes are identical.
+
+The supplied ladder/scaling diagrams have also been audited against the
+integer implementation. Exact anchors include `15^3=3375`, the 721-site
+`16^3-15^3` compounding shell, the 421/422 label census and seven-defect
+identity, `15*16=240`, and the diagram's `42/21=2` ratio. The last identity
+is not a consciousness measurement. `src/image_claims_probe.zig` verifies
+the panels' executable content: the Möbius z=0↔z=14 180° identification
+is label-compatible at odd inner sides and label-invisible; the qubit
+ladder is the canonical-pair chain (`15·2^s` interior, `16·2^s` shell,
+`8^s` canonical blocks) — a different indexing than the constant audit's
+power-of-two interiors; the Fibonacci cooling bars reproduce in Q128 as
+`w_z = φ^{-z}/Σφ^{-k}`. Diagram labels for physical dimensions, qbit
+counts, and prediction accuracy remain source/framework claims unless
+independently reproduced. See `PHASE-QUANTUM-AUDIT.md` under
+“Image-informed lattice and ladder audit”.
+
 ## Verification
 
 ```sh
@@ -86,6 +115,8 @@ Each sequence returns to zero after eight transits. Contract v1 pins `three_quar
 `src/phi_pi_position.zig` encodes the user-supplied positional semantics as declared contract v1: π is anchored at E0 (the geometric origin site); the state's 1D φ coordinate is carried inward along all six cardinal directions (±X, ±Y, ±Z — 42 interior ray sites); and the 16³ compounding shell (any coordinate == 15, 721 sites) carries the outward-φ role. Per the compounding law, the 16³ domain exists only when scaling — the bare 15³ has no shell interactions; scaling adds the 16³ layer to every 15³ block. The module assigns roles and directions only (exact census: 1 π-anchor, 3,374 φ-inward, 721 φ-compounding over unsigned 0..15 coordinates); it assigns no magnitudes and does not bridge position to equations — that derivation remains open.
 
 `src/mound_triad.zig` + `src/mound_triad_table.zig` verify the donor's MOUND triad table — 145 physical constants with fitted signatures under `T(a,b,c)=φ^a+π^b+φ^c` — in Q128.128 integer fixed-point. Targets are stored as exact `mantissa × 10^exp` integers; negative exponents down to −214 evaluate via reciprocal-base powers with underflow flagged rather than failed. `verifyAll` recomputes every row: 144 evaluable + 1 target-underflow (Planck time below the precision floor), 0 arithmetic failures, 130 within 1%, worst residual 2.71%. Correction hypotheses derived from the φ/π positioning (inward/outward φ split, compounding term, implied-base refit, exponent-residue and neighbor-signature searches) were tested and rejected — residuals are signature-fit noise, and implied per-term bases cluster at canonical φ/π within 0.01%. This is arithmetic coverage of a fit table, not physical validation.
+
+`src/lattice_constant_audit.zig` inventories exact lattice-native counts and ratios from scale 0 through scale 7 and compares them with the triad targets/signatures without fitting. Scale 0 is 15³; 16³ is only its compounding shell, scale 1 is skipped, and scale 2 starts at 32³. The seven represented sides are 15, 32, 64, 128, 256, 512, and 1024. The 42 lattice candidates are compared to the 145 donor rows; Q128 target underflows are counted per candidate comparison. The raw screen reports 0 exact matches, 17 within 1%, 1 within 0.1%, and 0 within 1 ppm; the percentage counts ignore units and are not physical matches. The H21 triad `φ⁵ + π² + φ⁻⁴`, its E0-centered π bubble, outer `φ⁵`, inner `φ⁻⁴`, and additive `7/66` candidate are carried separately; donor signatures are not refitted to lattice counts. Higher-scale label populations in this census are uniform modulo-8 metadata, not dense re-enumerations of the translated-Fano coloring. Raw residuals retain source units and evidence scope; numerical proximity is not physical validation.
 
 ### Manifest contract
 

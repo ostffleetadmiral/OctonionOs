@@ -31,3 +31,21 @@ test "octonion Fano basis is non-associative" {
     try std.testing.expect(isNonAssociative());
     try std.testing.expectEqual(@as(usize, 7), FANO_LINES.len);
 }
+
+test "dual Fano tables coexist: this table vs octonion.zig differs only on line {3,5,6} orientation" {
+    // Superposition check: `octonion.zig` (hardware donor lineage) uses
+    // the same seven Fano lines but orients {3,5,6} as {3,6,5}. Both are
+    // valid octonion multiplication tables; products agree on the unit
+    // everywhere and differ in sign exactly on the reversed line.
+    const other = @import("octonion.zig");
+    for (1..8) |a| for (1..8) |b| {
+        const p = mul(@intCast(a), @intCast(b));
+        const q = other.multiply(@intCast(a), @intCast(b));
+        try std.testing.expectEqual(p.unit, q.unit);
+        const on_line_356 = a != b and (a == 3 or a == 5 or a == 6) and (b == 3 or b == 5 or b == 6);
+        try std.testing.expectEqual(p.sign != q.sign, on_line_356);
+    };
+    // Both tables are valid: each is anticommutative and non-associative.
+    try std.testing.expect(isNonAssociative());
+    try std.testing.expect(other.isNonAssociative());
+}

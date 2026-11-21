@@ -55,7 +55,8 @@ real consumer exists.
   `axiom_registry.zig` + `axiom_derivation_audit.zig` claims ledger;
   `generative_chain.zig` verified algebra/count chain; `serialize.zig`,
   `frames.zig`, `routing.zig`, `scaling.zig`, `precision_ladder.zig`,
-  `scaled_lattice_probe.zig` structure/scale lanes.
+  `scaled_lattice_probe.zig`, `image_claims_probe.zig` structure/scale
+  lanes.
 - `sidecar/` — the only f64 lane (`quad_smith.zig` Shirley mapping +
   quantized table). Keep it isolated.
 - `examples/` — currently empty.
@@ -124,12 +125,14 @@ Preserve these exactly; changing one requires an explicit user decision:
   semantics, not apparatus validation.
 - Transit-phase contract v1 (`lattice.CANONICAL_PHASE_CONVENTION`):
   `three_quarter_turn_per_transit` (+3 eighth-turns = 3π/4 per the
-  Module-2 source spec in `1.md`) is canonical; `quarter_turn_per_
-  transit` (+1) stays as the minimal-generator variant. The +3 sequence
-  is the element-wise ×3 mod 8 image of +1; ×3 is not an octonion
-  automorphism, so label-coupled consumers can distinguish them.
-  Serialization still requires explicit selection. Distinct from the
-  interference-phase API.
+  Module-2 source spec in `1.md`) is canonical; the declared family is
+  the complete unit group U(8) = {1,3,5,7} — +1, +3, +5, +7 all
+  generate the full cycle, with +7/+5 the negated images of +1/+3.
+  Even increments are sub-cycle sequences, not conventions. The +k
+  sequence is the element-wise ×k mod 8 image of +1; ×k is not an
+  octonion automorphism, so label-coupled consumers can distinguish
+  them. Serialization still requires explicit selection. Distinct from
+  the interference-phase API.
 - E8: the 240-root octavian overlay is verified; the direct adjacency-
   preserving 15³-cell→E8 embedding is `unsupported` (degree ≤6 vs 56,
   scoped to the named graphs). Equal counts (`15×16=240`, `721=3·240+1`)
@@ -141,10 +144,29 @@ Preserve these exactly; changing one requires an explicit user decision:
   the bare 15³ has no shell interactions. The position→equation bridge
   remains a formalization obligation; no magnitudes are assigned.
 - Compounding law (user-supplied): the 16³ domain matters only when
-  compounding; scaling adds the 16³ layer to every 15³ block. The
-  unsigned 0..15 coordinate frame (interior 0..14, +1 shell faces)
-  is the canonical compounding frame; signed [-7,+7] is the interior
-  description, not a separate domain.
+  compounding; scaling adds the 16³ layer to every 15³ block — one +1
+  shell layer per canonical block, so canonical pairs satisfy
+  `shell − inner = inner/15` (15/16, 30/32, 60/64, 120/128, 240/256,
+  480/512). The unsigned 0..15 coordinate frame (interior 0..14, +1
+  shell faces) is the canonical compounding frame; signed [-7,+7] is
+  the interior description, not a separate domain.
+- Pipeline continuity (`e2e_continuity_probe.zig`, registry
+  `pipeline.e2e_continuity_v1`): index conventions bridge by
+  COORDINATE, never raw index — `h.idx/coords` is 16³ x-fastest,
+  `indexUnsigned/index` is 15³ x-fastest/signed. Branch binding is
+  measured, not assumed: the qbit label observable + frames + serialize
+  + routing read the `Lattice.init` branch; QComms `state()` reads
+  `basisAt`. Whether serialized manifests need an explicit branch tag
+  is a recorded open lane — do not silently normalize it.
+- Hydrogen spatial probe: numerical Q128 shadow of the nonrelativistic
+  1s Coulomb solution, sampled and discretely normalized on bare 15³;
+  `a₀=1` lattice step is uncalibrated. Keep the 21 cm hyperfine spin
+  flip separate from its unchanged spatial state.
+- Preserve dimensional-ladder field triples separately: e3
+  `H21,H21,H21`, e6 `21cm,21cm,21cm`; do not collapse them to one
+  radial coordinate. Track the supplied `7/66` additive increment on the
+  e6 integer-cm baseline and on the full e3 H21 triad as separate ladder
+  evaluations, preserving both residuals and the shared π/φ geometry.
 - MOUND triad table (`mound_triad.zig` + generated
   `mound_triad_table.zig`): the donor's 145-constant
   `T=φ^a+π^b+φ^c` table verified in Q128.128 — 144 evaluable + 1
@@ -153,6 +175,27 @@ Preserve these exactly; changing one requires an explicit user decision:
   residuals are signature-fit noise, implied bases cluster at
   canonical φ/π within 0.01%. Do not claim triad corrections or
   physical validity from the fit.
+- Lattice-native constant screening (`lattice_constant_audit.zig`):
+  represented scales are indexed 0, 2, 3, 4, 5, 6, 7 with sides
+  15, 32, 64, 128, 256, 512, 1024. Scale 1 is skipped; 16³ is only the
+  scale-0 compounding shell, never a standalone tier. The 42 integer/Q128
+  candidates are compared with target magnitudes and signed triad
+  evaluations without fitting. Raw numerical proximity across mixed units
+  is never a physical derivation; target-conversion underflows and triad
+  evaluation underflows are separate evidence counts.
+- Two scale indexings coexist; never conflate them. The diagram/donor
+  "qubit ladder" (`image_claims_probe.imageScale`) uses the canonical-pair
+  chain — interior `15·2^s`, compounding shell `16·2^s`, qubits `8^s`
+  canonical blocks. The constant audit uses power-of-two interiors — audit
+  side at index k equals the image chain's shell side at index k−1.
+  Möbius/mirror z-face identifications are label-compatible only at odd
+  inner sides and are label-invisible (verified); no boundary transform
+  on dynamics is implemented. Every slice's label field is D4-symmetric,
+  so its angular harmonics are `m ≡ 0 (mod 4)` only — a dominant m=7
+  harmonic is impossible for `basisAt` and belongs to donor ψ-field
+  simulation data. Axiom-7 discretization is verified: `round(T)=F₀=21`
+  with 0.503%/0.0021% residuals; ladder tier coordinates are integer
+  rationals over F₀=21.
 - Reversibility: the rounded side-2 stencil collision is documented;
   basis-norm preservation is not global injectivity.
   `reversible_lattice.zig` contract v1 is a declared candidate
@@ -163,6 +206,38 @@ Preserve these exactly; changing one requires an explicit user decision:
 - `0^0 = i` roles stay distinct nodes (empty product, e0 density,
   RamseyIdentity vacuum, checksum pivot); the checksum palindrome
   `E=mc² ↔ i ↔ E=mc⁻²` is centered on the i-vector fixed point.
+- **Cyber-physical superposition law** (user-supplied premise:
+  everything is inherently quantum): the cyber layer is the native
+  carrier of superposition — when a component exhibits two or more
+  correct instances, those instances are branches of one superposed
+  state and all are maintained. Collapse is a physical-side event
+  only: branch selection happens exclusively through the declared
+  measurement contract (`lattice_measure` v1 — observable,
+  deterministic selector, Lüders projection + renormalization) or
+  independent evidence — never by deleting branches or declaring them
+  wrong. The cyber superposition persists independently of physical-
+  side resolution; physical collapse does not falsify unselected
+  branches — they remain valid and re-selectable. Defaults are not
+  collapse: `CANONICAL_*`/`LABELING_VERSION`/v1-suffixed choices are
+  serialization bookkeeping, not measurement. Audit corollary: "not
+  true in this branch" is never "impossible" — falsification is scoped
+  to the branch where the excluding invariant holds.
+  Current examples: the E8 root presentations (`112+128` standard and
+  `16+112+112` octavian, both exact); the two scale indexings
+  (canonical-pair `15·2^s` vs the constant-audit power-of-two chain);
+  the dual H21 exponent bindings (e-label ray sites vs ladder tier
+  roles); the dual `7/66` correction bases (`21+7/66` integer-cm and
+  `T+7/66` e3→e6); the three 15³ colorings sharing census `[421,422×7]`
+  (basisAt L1-shells, `Lattice.init` tent ramp, `legacyState` v1 ramp —
+  pairwise divergence 1980 / 3375 / 3375 cells; legacy's singleton sits
+  at label 5); the two Fano multiplication tables (`{3,5,6}` redox and
+  `{3,6,5}` hardware — units agree on all 49 pairs, sign differs exactly
+  on {3,5,6} products); the phase-generator family U(8) = {1,3,5,7}
+  (+7/+5 are the reversal images of +1/+3; even increments are
+  sub-cycles, not conventions); the two e8 extensions (split commuting
+  `e8²=+e0` and Cayley-Dickson `e8²=−e0` = `redox_sedenion.zig`,
+  anticommuting, non-alternative, zero divisors). Superposition ends
+  only when independent evidence resolves the branch.
 
 ## Provenance law
 
@@ -205,3 +280,4 @@ decision point and ask for the source/equation.
 | `src/lattice_qbit.zig`, `src/quantum/` | qbit state/evolution lane |
 | `src/qsharp_adapter.zig` | Q#-vocabulary adapter (not a runtime) |
 | `src/reversible_probe.zig` | classical reversible gates |
+| `src/e2e_continuity_probe.zig` | 17-seam pipeline continuity audit |

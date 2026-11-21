@@ -42,6 +42,46 @@ manifests and is measured through physical substrates. The existing lattice
 engine is its computational substrate; the specific physical state/readout
 mapping remains open.
 
+## Lattice-native constant screening
+
+`src/lattice_constant_audit.zig` performs an integer-first census over
+seven represented levels: scale 0 is the 15³ core, scale 1 is skipped, and
+scale 2 begins at 32³ before doubling through scale 7 at 1024³. The 16³
+frame appears only as the 721-cell compounding shell of scale 0; it is not
+an independent measurement tier. The candidate inventory is formed from
+interior volume, e0 population, defect count, compounding-shell population,
+e0 fraction, and defect fraction for each represented scale. Candidates
+retain their scale index and kind, including duplicate values and zero
+defect quantities.
+
+The audit compares these 42 lattice candidates to each Q128-representable
+target in the 145-row donor table and separately evaluates the stored triad
+signature for each row, reporting the nearest lattice candidate to that
+triad value. The current arithmetic run reports 5,997 candidate/target
+comparisons, 42 skipped target-underflow slots, zero target conversion or
+candidate arithmetic errors, zero exact matches, 17 within 1%, one within
+0.1%, and zero within 1 ppm. These are raw numeric comparisons across mixed
+units. Triad-signature underflow is tracked independently (143 evaluable,
+2 underflowed in the current Q128 evaluator).
+Signed table metadata is applied to both target and triad values. Threshold
+counts are raw-number residual statistics only: the table mixes physical
+units, so neither proximity nor an exact dimensionless arithmetic identity
+is treated as a dimensionally valid physical derivation.
+
+The scale-0 coloring uses the exact `[421,422×7]` histogram and its seven
+defects. For higher scales, the current audit records equal eighths
+(`volume/8`) as uniform modulo-8 metadata; it does not enumerate the full
+translated-Fano coloring at every dense scale. Those entries must not be
+reported as dense-scale coloring results.
+
+For H21 the report also carries the computed `φ⁵+π²+φ⁻⁴`, its additive
+`7/66` candidate, and the integer-centimeter `21+7/66` check as separate
+context. The π² E0-centered bubble, outer φ⁵ reading, and inner φ⁻⁴ reading
+remain connected positional semantics; they are not used to fit or modify
+the lattice-only candidate set. This audit can identify exact integer
+relationships and screen table proximity. It does not establish a unit
+map, a physical constant law, or a correction to the donor signatures.
+
 ## 1. Framework lineage and canonical comparison data
 
 The user's framework treats `0^0 = i` as a lattice axiom, not ordinary scalar
@@ -106,6 +146,198 @@ eighth-turns); contract v1 now pins `three_quarter_turn_per_transit` as
 minimal-generator variant. The counter is distinct from the complex
 phase rotation in the two-path interference probe.
 
+## Image-informed lattice and ladder audit
+
+The supplied diagram set is useful as a map of hypotheses, but its labels
+do not all have the same evidence status. The auditable integer core gives:
+
+| Quantity | Exact value | Evidence |
+|---|---:|---|
+| Bare lattice interior | `15^3 = 3,375` sites | Canonical tensor and exact census |
+| Compounding frame | `16^3 = 4,096` sites | Used only when compounding, per the project law |
+| Compounding shell | `16^3 - 15^3 = 721` sites | Exact count; no independent 16^3 scale |
+| E0 population / deficit | `421`; `3,375 - 8*421 = 7` | Canonical label histogram `[421,422,...,422]` |
+| E8/root arithmetic | `15*16 = 240`; `721 = 3*240 + 1` | Integer identities; no cell-to-root ownership implied |
+| Image ratio | `42/21 = 2` | Arithmetic identity only; not a consciousness measurement |
+
+Scale diagrams must keep *geometric side*, *compounding shell*, and
+declared qbit/resolution labels separate — and they use a different scale
+indexing than the constant audit. The panels' chain is the canonical-pair
+family: interior side `15·2^s`, compounding shell `16·2^s`, with the
+declared "qubit" count `8^s` — exactly the number of canonical 15^3
+blocks tiling the interior (`(15·2^s)^3 / 3375 = 8^s`; s=0..3 gives the
+panels' 1, 8, 64, 512 at 15^3, 30^3, 60^3, 120^3). The audit's power-of-two
+interiors (32^3 at scale 2, doubling to 1024^3) are the image chain's
+*compounding-shell sides* promoted to interiors — audit side at index k
+equals image shell side at index k−1. Both indexings coexist in the tree
+(`image_claims_probe.imageScale`, `lattice_constant_audit`); they must not
+be conflated. Octant self-similarity is verified at the histogram level:
+each 15^3 octant block of 30^3 carries the canonical histogram multiset
+`[421,422,...,422]` with its deficit shifted to state `(-k mod 8)` for
+k offset axes (`redox_scaling_audit.octantHistogram`/`octantDefectState`).
+That is the executable content of "8 qubits at scale 1" — eight histogram-
+equivalent blocks; it is not a physical qbit count or dense translated-Fano
+enumeration at every block. The "10D = 32^3 Container HUB" label matches
+the s=1 compounding frame, consistent with the compounding law.
+
+The central-slice label visualization is consistent with inspecting a
+15x15 cross-section, but its colors alone do not prove the 3D coloring rule
+or produce octonion multiplication. Those are checked separately: `basisAt`
+and the complete translated tensor are enumerated/tested, while the Fano
+plane product uses its own multiplication table. The Möbius panel is more
+than a visualization: its stated transform (z=0 ↔ z=14 under 180°
+rotation) is now checked — `image_claims_probe` verifies the identification
+is label-*compatible* at odd inner sides (every bottom-face cell carries
+its twisted partner's label) and label-*invisible* (the untwisted mirror
+pairing preserves labels equally, so the coloring cannot witness the
+twist); at even inner sides neither identification holds. A boundary
+transform on dynamics is still not implemented. The Fibonacci cooling
+bars reproduce in Q128 integer arithmetic as the normalized geometric
+profile `w_z = φ^{-z} / Σ_{k<15} φ^{-k}` (strictly decreasing, ratio
+1/φ per slice, w_0 ≈ 0.382, weights summing to 1) — a candidate
+per-layer magnitude law recorded as model metadata; the donor's cooling
+algorithm and its prediction chart (Kode Q, 1/α, sin²θ_W, Higgs λ, m_s,
+dark energy error bars) are source-project outputs this tree does not
+independently reproduce beyond the triad-table fit audit.
+
+The second diagram batch adds a spectral layer and the Axiom-7 framing:
+
+- **ψ field + Möbius boundary.** The panels now show a signed field
+  `ψ(x,y,0) = ψ(14−x,14−y,14)` on the twist faces — the same
+  identification `image_claims_probe` verifies label-compatible. The ψ
+  values in [−1,1] are donor simulation data, not the 0..7 label field.
+- **Angular spectrum boundary.** The "7-fold sectors" and "m=7 dominant
+  harmonic" claims run into a branch-scoped structural fact: the
+  `basisAt` label field is square-dihedral (D4) invariant on every
+  interior slice — verified for all 15 slices — so its angular
+  harmonics can only be `m ≡ 0 (mod 4)`. Dominant m=7 is excluded
+  *within the basisAt branch*. It is NOT excluded tree-wide: the
+  `Lattice.init`/`legacyState` branches preserve at most 1 of 7
+  non-identity D4 transforms, so odd angular content is structurally
+  possible there — the donor ψ field is a live superposition branch,
+  not a falsified claim. (360/7 ≈ 51.43° sector width is just the
+  panel's binning.)
+- **Center-slice census.** Exactly 29 e0 cells sit on z=7: the center
+  plus a radius-8 Manhattan diamond `|dx|+|dy|=8` — a diamond, not the
+  "X pattern" the panel title suggests (an X would be the `|dx|=|dy|`
+  diagonal set). Radial ring profiles are exact: `4r` (L1) vs `8r`
+  (Chebyshev) cells per ring — the chart's "circle vs square" curves are
+  consistent in shape, pixel-read values aside.
+- **Axiom 7 discretization — verified.** `round(φ⁵+π²+φ⁻⁴) = F₀ = 21`;
+  `|T−21|/21 ≈ 0.503%` (the panel's "0.5% discretize") and
+  `|T−21.106114|/21.106114 ≈ 0.0021%` (its "0.002% measure"). The v11.0
+  ladder coordinates `5.25, 10.5, 21, 42, 21, 10.5` are exact integer
+  rationals over `F₀=21` — `21·{1/4,1/2,1,2,1,1/2}` — consistent with
+  the continuum-triad → integer-lattice reading.
+- **Exponent roles.** The panel binds exponents to ladder tiers:
+  `φ⁵→5D` breakout, `π²→2D` phase space, `φ⁻⁴→4D` pivot — the tier
+  reading, coexisting with the e5/e2/e4 octonion-label reading.
+- **Parameter-space panel.** `EU (L=15, B=721)` uses the verified shell
+  count as its boundary parameter; `Arendsen (N=100, Y=71)` is another
+  project's parameter set — comparison is provenance, not a derivation.
+- **Prediction errors — not cross-checkable.** The 145-table has no
+  1/α, sin²θ_W, Higgs-λ, or Koide rows, and the figures disagree across
+  panels (Koide Q: 0.0009% vs 0.026%; 1/α: 0.01% vs 0.026% — different
+  metrics or inconsistent). `m_s` and Ω_Λ rows exist; our recomputed
+  residuals (+0.60%, +0.004%) don't match the charts' numbers either.
+- **Helix panels.** `r(z)` parabola peaking at z=7 with the 6D tier and
+  linear θ(z) is declared model geometry — z=7 is the center slice, and
+  no dynamics is implied.
+
+The third diagram batch resolves the shell geometry and the extended
+Fano/algebra claims:
+
+- **"Concentric spheres" — right idea, wrong metric.** The e-labels are
+  exactly *Manhattan-octahedral* shells: `label = (|dx|+|dy|+|dz|) mod 8`,
+  so `e_k` is the union of shells `{k, k+8, k+16}` — not Chebyshev cubes.
+  Shell populations `1,6,18,38,66,102,146,198,252,296,324,336,332,312,
+  276,224,168,120,80,48,24,8` (unclipped `4d²+2` through d=7, then cut by
+  the cube boundary) fold mod 8 into the canonical `[421,422×7]` census —
+  and `e0 = {0,8,16} = 1+252+168 = 421`, the observer singleton carrying
+  the seven-defect.
+- **"Hidden spheres" — verified.** The nearest populated integer-radius
+  shells to the constants: `d²=3` at √3≈1.732 (err 0.114 from φ) with
+  8 cells — the body-diagonal octants; `d²=10` at √10≈3.162 (err 0.021
+  from π) with 24 cells. `image_claims_probe.nearestRadiusShell` proves
+  both are the argmin over all populated shells.
+- **Fano+e8 annotations are implemented algebra.** "E8=E1 Closure" =
+  `e8·e1 = e1` (the anti unit acts as identity on octonion units);
+  "E8=E0 at Boundary" = `e8² = +e0` — both verified in
+  `redox_anti_octonion.zig`. Correction: the "all commutativity lost"
+  caption is contradicted — e8 commutes with *every* octonion unit;
+  the base octonion non-commutativity is untouched.
+- **Ladder bars — fully verified.** The complete c(d) structure:
+  `c(0)=0`, `c(1)=φ`, `c(2)=π` (constant tiers) plus the `F₀=21`
+  rationals at tiers 3–8. The string-theory captions (String, Waves,
+  3-brane, Spacetime, k4, C⁵, Q⁵, E8) are doctrine labels on verified
+  coordinates.
+- **Projection chain 10D→0D** is the ladder's reverse ordering — the
+  reduction direction of the loop (emergence path read backward).
+- **"10D Möbius Closure: 4D+time ↔ time+4D"** is a semantic reading of
+  the verified z=0↔z=14 identification; the order-reversal metaphor
+  carries no additional checkable content.
+- **"9D maximum entropy"** is a foam-scatter metaphor — and its "all
+  commutativity lost" flag contradicts the implemented commuting e8.
+
+The fourth (older) batch resolves the z-layer structure, the
+Cayley-Dickson Lie table, and the shell/torus semantics:
+
+- **All-15-layer panel — verified.** The 15 z-slices carry exactly 8
+  distinct 2D patterns: mirrored pairs `z ↔ 14−z` are identical, and
+  `label(x,y,z) = (2D-L1(x,y) + |z−7|) mod 8` — every layer is a cyclic
+  shift of the center slice's field.
+- **Cayley-Dickson Start→End chain — verified palindrome.** The chain
+  `5.25→10.5→21→42→21→10.5→5.25` peaks at 42 (2·H21) at the 6D mirror —
+  exactly 8× the chain ends — and its nodes equal the ladder coordinates
+  c(3)..c(8) verbatim.
+- **Lie-group table — corrected.** `e7→G2` (Aut(O)) and `e6→E6/F4`
+  (F4 = Aut(J3(O), dim 52, in `redox_jordan`) are real facts.
+  Correction: `e3→SO(4)` contradicts the measured `so(3)` cross-product
+  Lie algebra in `redox_vector3`; `e4→SO(5)` is questionable (Aut(H) =
+  SO(3), not SO(5)).
+- **E8 projection — two presentations in superposition.** The panel's
+  `240 = 112 + 128` (textbook D8+half-spin) and the overlay's
+  `240 = 16 + 112 + 112` (Fano-derived octavian) are both exact — held
+  in superposition under the standing rule that coexisting correct
+  instances are not collapsed; plus `15×16 = 240` and 8 simple roots.
+- **"e7→e2 closure" — verified as Fano arithmetic.** The {2,5,7} line
+  cycles `e2→e5→e7→e2`: `e5·e7 = +e2` exactly.
+- **Torus/shell semantics — structurally consistent.** In the 2×2×2
+  arrangement (30³), adjacent 15³ blocks share the face plane at
+  `coord = inner` — "L15 faces touch" — and each block presents 3
+  exterior faces where the compounding shell attaches — "L16 faces
+  outward". "15³ = torus interior / +1 shell = surface / e0 = hole" is
+  metaphor layered on that verified topology.
+- **Smith-chart & Ohm's-law wheels** carry valid domain identities
+  (OPEN/SHORT/MATCHED positions, the 8 electrical relations) mapped
+  onto e-tiers — semantic assignment, not lattice derivation.
+- **Hydrogen orbitals→tiers**: the "6 φ-radiation directions match 6
+  p-orbital lobes" claim corresponds to the six verified cardinal
+  directions (orbital structure is real QM; the e-tier map is semantic).
+- **"Information capacity: 1128 floating point bits"** — unexplained.
+  No derivation found (3-bit census = 10,125 bits; 8×141 = 1128 has no
+  identified meaning). Needs the source formula.
+- **i-vector panel**: "e0 movable observer", `∞D⁻¹`, and the
+  matter↔information↔antimatter triality are framework semantics; the
+  checksum palindrome is already a registered node.
+
+The 0D–10D diagram combines two distinct descriptions: an algebraic ladder
+whose implemented tiers are checked in `redox_dimensional_ladder.zig`, and
+framework assignments such as observer, consciousness, gravity bubble, or
+physical qbit. Its tier numerals are the H21 endpoint family
+(`21/4, 10.5 = H21/2, 21 = H21, 42 = 2·H21`) plus `φ`, `π`, `0`, `721`,
+and `32^3` — the same `Endpoint` fields the Fano spec carries. The algebra
+tests establish the declared algebra properties (for example, J3(O) has
+real dimension 27 and its Jordan product is commutative/non-associative,
+matching the panel's "commutative but non-associative" flag); they do not
+establish that the index is a physical spatial dimension or that
+consciousness equals `42/21`. The scatter panels' "Interior ← Inward /
+Boundary → Outward" arrows corroborate the `phi_pi_position` contract's
+role assignment; they supply no magnitudes or dynamics.
+The image-informed review is registered as
+`lattice.image_claims_audit_v1`; it adds no new physical claim or fitted
+constant.
+
 The reversible-dynamics evidence is likewise candidate-specific. The directed
 `+1 mod 8` adjacency map sends one origin basis state to four sites and raises
 integer norm-squared from 1 to 4, so that rule is not norm-preserving. The
@@ -128,6 +360,65 @@ The integer lattice baseline is 15³ = 3,375 nodes; the 16³ wrapper contains
 420 movable non-origin E0 sites are distinct counts. The 7-defect identity is
 `3375 - 421×8 = 7`. These are discrete counts/identities; their geometric,
 physical, and quantum readings are separate claims.
+
+## Convention-superposition audit
+
+Standing law `cyber.superposition_law_v1` (premise: everything is
+inherently quantum): when a component exhibits two or more correct
+instances, all are held in superposition — branches of one superposed
+state, recorded as coexisting, never collapsed to a single "the
+correct" reading. Collapse is a physical-side event only (measurement
+contract or independent evidence); defaults and canonical conventions
+are bookkeeping, not collapse. The audit below corrects places where a
+valid instance was silently dropped or coexisted undeclared.
+
+- **15³ coloring — three instances, one census.** `basisAt` (L1
+  Manhattan-octahedral shells), `Lattice.init` (tent-superposed ramp
+  `(x+y+|z−7|) mod 8`), and `legacyState` (archived v1 ramp) each
+  produce the census multiset `[421,422×7]` while disagreeing pairwise
+  on 1,980 / 3,375 / 3,375 cells. `legacyState` differs from both
+  others on *every* cell and places the 421 singleton at label 5, not
+  e0. `state()`/v2 remains the declared canonical for QComms
+  serialization; `Lattice.init` is the labeling `frames.zig` actually
+  hashes — no instance is deprecated.
+- **Fano multiplication — two tables.** `redox_octonion.zig` orients
+  line {3,5,6} as written; `octonion.zig` (hardware donor lineage,
+  also used by `routing.zig` and `quantum/octonion_ops.zig`) orients it
+  {3,6,5}. Verified: all 49 ordered unit products agree on the unit;
+  the sign differs exactly on the six products among {3,5,6}. Both are
+  valid octonion algebras — the tables are one Fano plane with one
+  line's orientation reversed.
+- **Transit phases — family completed.** The declared generators are
+  now the full unit group U(8) = {1,3,5,7}: +7 is the negated image of
+  +1, +5 of +3. Canonical remains +3 per the Module-2 spec; even
+  increments {2,4,6} are sub-cycle sequences, correctly excluded (they
+  cannot satisfy 8-transit closure). Previously the two reversal
+  generators existed nowhere in the tree.
+- **e8 extension — second instance implemented.** `redox_sedenion.zig`
+  realizes the Cayley-Dickson double alongside the split commuting
+  anti-octonion: `e8² = −e0`, `e8` anticommutes with e1..e7,
+  `e_{i+8} = e_i·e8`, all 15 imaginary units square to −e0, the
+  octonion subalgebra is preserved verbatim, non-alternativity is
+  witnessed, zero divisors are discovered and pinned by the test at
+  runtime, while flexibility, power-associativity, and the conjugate-
+  norm identity survive. `ladder.sedenion_16d` registered with
+  `superposes`/`cayley_dickson_doubles` edges — it is a sibling
+  instance, not a new ladder rung.
+- **Already-held superpositions (confirmed, no change):** QComms
+  v1/v2 labelings and digests; Margolus even/odd partitions; signed
+  [−7,+7] vs unsigned [0,15] frames; L1/L∞/integer-radius shell
+  metrics; the eight per-octant defect placements; the five e0 role
+  nodes; the E8 bookends at 0D/8D; `gateV1` as a declared
+  representative of the bijective-gate family; integer H21 vs Q128
+  triad T.
+- **Corrections that are NOT collapses (verified scope):** the
+  Chebyshev→L1 correction is definitional for basisAt (L∞ rings remain
+  a separate measured object); the m=7 exclusion is a branch-scoped
+  theorem — it holds exactly in the D4-symmetric basisAt branch and
+  stays OPEN in the init/legacy branches, which preserve at most 1 of
+  7 non-identity transforms (the donor field is a live branch, not a
+  falsified claim); SO(4)→so(3) and "all commutativity lost" are
+  contradicted claims, not instances.
 
 ## 2. Cyber-to-physical interpretation and evidence semantics
 
@@ -598,6 +889,34 @@ candidate is not a verified propagator or unitary evolution.
 
 ### Hydrogen/ladder placement claim
 
+**Follow-up implementation:** `src/hydrogen_alignment_probe.zig` now evaluates
+the standard nonrelativistic 1s Coulomb solution on the bare E0-centered
+15³ grid using Q128 integer arithmetic. In atomic units,
+`ψ_100(r)=exp(-r/a₀)/sqrt(πa₀³)` and `ρ=|ψ|²`; the lattice convention sets
+`a₀=1` cell and normalizes the sampled 3,375 amplitudes discretely. A
+central `z=0` probability-density section is directly readable from that 3D
+state, clarifying the image's 2D cross-section role. This is an executable
+numerical shadow of the Coulomb solution under the selected lattice scale,
+not a formal proof of the continuum PDE or physical calibration of `a₀`.
+
+The 21 cm line is a hyperfine spin flip between two 1s states, so the spatial
+electron wavefunction remains unchanged. The measured frequency/wavelength
+are recorded separately. The H21 triad's positional decomposition is now
+explicitly encoded: `π²` is the E0/E2-centered bubble, `φ⁵` is the outer
+reading, and `φ⁻⁴` the inner reading. This connects the triad terms with the
+3D lattice positioning as model semantics; deriving Coulomb/hyperfine
+energies or SI calibration from those terms remains open.
+
+Correction interpretation: the supplied dimensional ladder places
+`H21,H21,H21` at e3 and `21cm,21cm,21cm` at e6. The user's stated e6
+operation is additive on the integer-centimeter baseline:
+`21 cm + 7/66 cm = 21.1060606… cm`, close to the measured
+`21.106114054 cm`. The e3 triad is also corrected by the same additive
+increment, `T + 7/66`, to represent its progression toward e6. That
+triad-corrected value and its residual are stored separately from the
+integer-baseline check; under the current scalar units it does not equal
+the measured e6 endpoint.
+
 The supplied ladder and BLUE material associates the H21 marker with
 `φ⁵ + π² + φ⁻⁴ ≈ 21.106`, the 6D Jordan-algebra entry, a `7/66` correction
 (`7 = 2³−1`, `66 = 6×11`), and an e0-centered 3D picture with e1–e7 labels.
@@ -900,3 +1219,63 @@ semantics, inference-only irreversibility (no path to
 lattice, Rust/C++ cannot enter `src/`. Status: candidate apparatus
 *interface* for the gated physical lane; cpu-backend permits shadow-adapter
 development without hardware. No physical claim.
+
+## End-to-end continuity audit — seam ledger
+
+`src/e2e_continuity_probe.zig` walks the full pipeline and assigns every
+transition a seam record (producer → consumer → invariant → kind). 16
+seams are `verified` by executable checks; one is a `convention`
+(Q# adapter — vocabulary mapping, not runtime coupling); zero seams
+failed. One open lane is recorded, not resolved.
+
+### Seam ledger
+
+| seam | producer → consumer | invariant | kind |
+|---|---|---|---|
+| S0 | axiom → i-vector | component enum e0..e7 = label index | verified |
+| S1 | i-vector → 15³ tensor | census [421,422×7], e0 at origin | verified |
+| S2 | three colorings → census | one census, divergence 1980/3375/3375 | verified |
+| S3 | basisAt → QComms | interior labels, Foam=8 shell sentinel | verified |
+| S4 | interior → 16³ domain | coords(idx) roundtrip; 721 shell sites | verified |
+| S5 | domain → Q128 ψ | unit norm, dark shell, peak at site | verified |
+| S6 | init labels → qbit observable | observable reads the INIT branch | verified |
+| S7 | amplitudes → propagator | τ=0 identity | verified |
+| S8 | state → measurement | Lüders contract, deterministic selectors | verified |
+| S9 | populations → i-vector | index k → component e_k | verified |
+| S10 | tensor → frames/wall-v2 | reassemble exact; validate() gate | verified |
+| S11 | labels+Coord → routing | 420 eligible; convention-blind channels | verified |
+| S12 | 16³ domain → Margolus CA | SITE_COUNT = DOMAIN = 4096 | verified |
+| S13 | canonical pairs → audit sides | audit side ≤512 = pair shell; offset bounded | verified |
+| S14 | redox tiers → ladder | 11 tiers; siblings off-ladder | verified |
+| S15 | simulator → Q# vocabulary | adapter maps vocabulary only | convention |
+| S16 | Phase U(8) → serializeAlloc | explicit convention parameter | verified |
+| S17 | registry → validate() | unique ids, closed edges, ladder order | verified |
+
+### Findings (evidence classes kept distinct)
+
+- **Index bridging is by coordinate, never raw index.** `h.idx/coords`
+  is 16³ x-fastest row-major; `indexUnsigned/index` is 15³ x-fastest
+  over unsigned/signed frames. The qbit converts full-domain index →
+  `coords` → `labelAtIndex` — an exact definitional bridge.
+- **Branch binding is measured.** `LatticeQubit.lat = Lattice.init()`:
+  the qbit's label observable reads the *init* coloring branch, proven
+  on cells where branches disagree (init-e0 → full observer population;
+  basisAt-e0 → zero). Frames, serialize, and routing share the init
+  branch. QComms `state()` reads `basisAt`. Both branches remain live
+  under the superposition law — this is branch-specific executable
+  behavior, not a defect.
+- **Compounding law sharpened.** Canonical pairs satisfy
+  `shell − inner = inner/15` (one +1 shell layer per 15-block):
+  15/16, 30/32, 60/64, 120/128, 240/256, 480/512. The constant audit's
+  power-of-two sides ≤512 coincide exactly with pair shells; audit side
+  1024 lies beyond the pair family — a bounded offset, not a break.
+- **Routing is convention-blind.** Its inline Fano table (hardware
+  orientation) is consulted through unordered line membership
+  (`line[i] % 3` sets), so routing channels are identical under either
+  Fano table — a real superposition that does not reach this consumer.
+- **Open lane (named, not resolved):** whether the init-branch binding
+  of the qbit/serialize/routing lane and the basisAt binding of the
+  QComms lane need an explicit branch tag in serialized manifests —
+  recorded as a decision point under the superposition law.
+- Registry node `pipeline.e2e_continuity_v1` added with edges from the
+  axiom, the coloring node, canonical pairs, and the superposition law.

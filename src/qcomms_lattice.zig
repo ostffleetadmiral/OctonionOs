@@ -1,6 +1,7 @@
 //! QComms lattice labels aligned to the Octonion-OS True-Origin tensor.
 const std = @import("std");
 const canonical = @import("redox_scaling_tiers.zig");
+const lattice_mod = @import("lattice.zig");
 
 pub const Inner = 15;
 pub const Shell = 16;
@@ -92,4 +93,47 @@ test "lattice mirror and shell invariants" {
     }
     try std.testing.expectEqual(@as(usize, 721), foam);
     try std.testing.expectEqual(@as(usize, 721), canonical.foamCount(Inner, Shell));
+}
+
+test "three colorings hold one census in superposition" {
+    // Standing rule: coexisting correct instances are not collapsed.
+    // Three valid 15^3 labelings live in this tree —
+    //   state()       = canonical basisAt, L1 Manhattan-octahedral
+    //                   shells; defect singleton at label e0.
+    //   legacyState() = archived v1 ramp (x+y+tent(z)) mod 8; the 421
+    //                   singleton sits at label 5.
+    //   Lattice.init  = tent-superposed ramp (x+y+|z-7|) mod 8; defect
+    //                   at e0 — the labeling carried by frames.zig.
+    // All three produce the [421, 422 x7] census multiset while
+    // disagreeing pairwise on thousands of cells.
+    const lattice = lattice_mod.Lattice.init();
+    var h_state = [_]usize{0} ** 8;
+    var h_legacy = [_]usize{0} ** 8;
+    var h_init = [_]usize{0} ** 8;
+    var d_state_init: usize = 0;
+    var d_state_legacy: usize = 0;
+    var d_init_legacy: usize = 0;
+    for (0..Inner) |z| for (0..Inner) |y| for (0..Inner) |x| {
+        const s = state(@intCast(x), @intCast(y), @intCast(z));
+        const l = legacyState(@intCast(x), @intCast(y), @intCast(z));
+        const i = lattice.labels[lattice_mod.Lattice.indexUnsigned(x, y, z)];
+        h_state[s] += 1;
+        h_legacy[l] += 1;
+        h_init[i] += 1;
+        if (s != i) d_state_init += 1;
+        if (s != l) d_state_legacy += 1;
+        if (i != l) d_init_legacy += 1;
+    };
+    const census = [_]usize{ 421, 422, 422, 422, 422, 422, 422, 422 };
+    try std.testing.expectEqual(census, h_state);
+    try std.testing.expectEqual(census, h_init);
+    // Legacy places the singleton at label 5, not e0.
+    var legacy_sorted = h_legacy;
+    std.mem.sort(usize, &legacy_sorted, {}, std.sort.asc(usize));
+    try std.testing.expectEqual(census, legacy_sorted);
+    try std.testing.expectEqual(@as(usize, 421), h_legacy[5]);
+    // Exact pairwise divergence, measured exhaustively.
+    try std.testing.expectEqual(@as(usize, 1980), d_state_init);
+    try std.testing.expectEqual(@as(usize, 3375), d_state_legacy);
+    try std.testing.expectEqual(@as(usize, 3375), d_init_legacy);
 }

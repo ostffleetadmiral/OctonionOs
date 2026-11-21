@@ -13,6 +13,8 @@ pub const PHASE_STEPS_PER_CYCLE: u8 = 8;
 pub const PhaseConvention = enum(u8) {
     quarter_turn_per_transit = 1,
     three_quarter_turn_per_transit = 3,
+    five_quarter_turn_per_transit = 5,
+    seven_quarter_turn_per_transit = 7,
 
     pub fn incrementEighthTurns(self: PhaseConvention) u3 {
         return @intCast(@intFromEnum(self));
@@ -23,12 +25,17 @@ pub const PhaseConvention = enum(u8) {
 /// engineering directive (recorded in `1.md`) specifies "geometric
 /// phase accumulation of 3π/4 per transit with closure at 8 transits" —
 /// 3π/4 = 3 eighth-turns, i.e. `.three_quarter_turn_per_transit`.
-/// `.quarter_turn_per_transit` (+1, the minimal generator of Z/8) is
-/// retained as the covering-preimage variant: the +3 sequence is the
-/// element-wise ×3 mod 8 image of the +1 sequence, and ×3 is not an
-/// octonion automorphism, so label-coupled consumers can distinguish
-/// the conventions. The choice is contract metadata (serialization
-/// still requires an explicit convention), not a physical claim.
+/// The declared family is the COMPLETE unit group U(8) = {1,3,5,7} —
+/// every increment that generates the full Z/8 cycle and closes at 8
+/// transits. The conventions pair into direction reversals: +7 is the
+/// negated image of +1, +5 of +3 (+k + +k' ≡ 0 mod 8). Each +k
+/// sequence is the element-wise ×k mod 8 image of the +1 sequence, and
+/// multiplication by a unit is not an octonion automorphism, so
+/// label-coupled consumers can distinguish the conventions. The
+/// canonical choice is contract metadata (serialization still requires
+/// an explicit convention), not a physical claim. Even increments
+/// {2,4,6} are not represented: they are sub-cycle sequences that
+/// cannot satisfy the spec's 8-transit closure.
 pub const CANONICAL_PHASE_CONVENTION: PhaseConvention = .three_quarter_turn_per_transit;
 
 pub const Coord = struct {
@@ -285,6 +292,8 @@ test "phase conventions are explicit and each closes after eight transits" {
     const cases = [_]struct { convention: PhaseConvention, expected: [8]u3 }{
         .{ .convention = .quarter_turn_per_transit, .expected = .{ 1, 2, 3, 4, 5, 6, 7, 0 } },
         .{ .convention = .three_quarter_turn_per_transit, .expected = .{ 3, 6, 1, 4, 7, 2, 5, 0 } },
+        .{ .convention = .five_quarter_turn_per_transit, .expected = .{ 5, 2, 7, 4, 1, 6, 3, 0 } },
+        .{ .convention = .seven_quarter_turn_per_transit, .expected = .{ 7, 6, 5, 4, 3, 2, 1, 0 } },
     };
     for (cases) |case| {
         var phase = Phase{};
@@ -328,8 +337,8 @@ test "sigma3 relabeling is not an octonion automorphism" {
     try std.testing.expect(product.unit != sigma3(3));
 }
 
-test "both phase conventions share cycle invariants" {
-    const conventions = [_]PhaseConvention{ .quarter_turn_per_transit, .three_quarter_turn_per_transit };
+test "all phase conventions share cycle invariants" {
+    const conventions = [_]PhaseConvention{ .quarter_turn_per_transit, .three_quarter_turn_per_transit, .five_quarter_turn_per_transit, .seven_quarter_turn_per_transit };
     for (conventions) |convention| {
         var phase = Phase{};
         var previous: ?u3 = null;
@@ -342,6 +351,39 @@ test "both phase conventions share cycle invariants" {
             if (step + 1 == 4) try std.testing.expectEqual(@as(u3, 4), phase.eighth_turns);
         }
         try std.testing.expectEqual(@as(u3, 0), phase.eighth_turns);
+    }
+}
+
+test "phase family is the complete unit group U(8) with reversal pairs" {
+    // Exactly the odd increments generate the full Z/8 cycle; the enum
+    // covers all four units and nothing else.
+    const info = @typeInfo(PhaseConvention).Enum;
+    try std.testing.expectEqual(@as(usize, 4), info.fields.len);
+    var seen = [_]bool{false} ** 8;
+    inline for (info.fields) |field| {
+        const k = field.value;
+        try std.testing.expect(k % 2 == 1);
+        try std.testing.expect(!seen[k]);
+        seen[k] = true;
+    }
+    for ([_]u8{ 1, 3, 5, 7 }) |u| try std.testing.expect(seen[u]);
+
+    // Reversal pairs: +k and +(8-k) traverse negated sequences.
+    const pairs = [_][2]PhaseConvention{
+        .{ .quarter_turn_per_transit, .seven_quarter_turn_per_transit },
+        .{ .three_quarter_turn_per_transit, .five_quarter_turn_per_transit },
+    };
+    for (pairs) |pair| {
+        var forward = Phase{};
+        var reverse = Phase{};
+        for (0..PHASE_STEPS_PER_CYCLE) |_| {
+            forward.transit(pair[0]);
+            reverse.transit(pair[1]);
+            try std.testing.expectEqual(
+                @as(u4, 0),
+                (@as(u4, forward.eighth_turns) + @as(u4, reverse.eighth_turns)) % PHASE_STEPS_PER_CYCLE,
+            );
+        }
     }
 }
 

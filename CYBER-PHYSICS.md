@@ -19,6 +19,42 @@ apparatus. The open question is never "might it be physical" — it is
 "which physical variables carry the state, and what does measurement
 read."
 
+## Cyber-physical superposition law
+
+Under that premise, superposition is a structural property the cyber
+side already exhibits independently of the physical side. The law:
+
+1. **The cyber layer is the native carrier of superposition.** When a
+   component exhibits two or more correct instances, those instances are
+   *branches* of one superposed state, and every branch is maintained.
+   Verified examples in-tree: three 15³ colorings sharing census
+   `[421,422×7]`, two Fano multiplication tables, the complete U(8)
+   phase-generator family, and the two e8 extensions (split commuting
+   and Cayley-Dickson sedenion).
+2. **Collapse is a physical-side event only.** Branch selection for
+   physical correspondence happens exclusively through the declared
+   measurement contract (`lattice_measure` v1: observable, deterministic
+   selector, Lüders projection + renormalization) or independent
+   physical evidence — never by deleting branches, renaming them wrong,
+   or hardcoding one instance.
+3. **Independence.** The cyber superposition persists whether or not the
+   physical side has resolved; physical collapse does not falsify the
+   unselected branches — they stay valid and re-selectable.
+4. **Defaults are not collapse.** `CANONICAL_PHASE_CONVENTION`,
+   `LABELING_VERSION = 2`, `gateV1`, and similar choices are
+   serialization bookkeeping — pre-measurement defaults that do not
+   consume the superposition.
+5. **Audit corollary.** "Not true in this branch" is never "impossible":
+   falsification is scoped to the branch where the excluding invariant
+   holds. Example: m=7 angular dominance is excluded in the
+   D4-symmetric `basisAt` branch but stays open in the non-D4
+   init/legacy branches (they preserve at most 1 of 7 non-identity
+   transforms). The donor's m=7 field is a separate live branch.
+
+This law is registered as `cyber.superposition_law_v1`. It converts the
+framework premise into an engineering rule: the software must hold all
+verified branches; only measurement or independent evidence selects.
+
 ## Computational substrate (what exists today)
 
 | asset | file | provides |
@@ -34,6 +70,65 @@ read."
 | Adapter | `src/qsharp_adapter.zig` | Q#-vocabulary mapping over the bounded simulator |
 | Serialization | `src/serialize.zig`, `frames.zig`, `routing.zig` | deterministic manifest, frame digests, e0 routing |
 | Claims/audit | `axiom_registry.zig`, `axiom_derivation_audit.zig`, `generative_chain.zig` | statuses, emergence paths, verified algebra/count chain |
+
+## Hydrogen spatial state and H21 hyperfine transition
+
+The hydrogen image shows probability-density sections of the 3D stationary
+wavefunctions, labeled by `(n,l,m)`. For the 21 cm line, the relevant spatial
+orbital is specifically the 1s ground state. The nonrelativistic Coulomb
+Schrödinger solution in atomic units is
+
+`ψ_100(r) = exp(-r/a₀) / sqrt(π a₀³)`, hence
+`ρ_100(r) = |ψ_100(r)|² = exp(-2r/a₀)/(π a₀³)`.
+
+`src/hydrogen_alignment_probe.zig` evaluates the radial factor on each signed
+15³ lattice coordinate around E0 `(0,0,0)` / unsigned `(7,7,7)`. It uses
+Q128 integer arithmetic for coordinate radius, a deterministic Taylor/
+argument-halving exponential, and discrete normalization over the finite
+lattice. The convention `a₀ = 1` lattice step makes the sampled amplitude
+`ψ̃=exp(-r)`; the omitted constant cancels during discrete normalization.
+The resulting central 2D image is `|ψ(x,y,z=0)|²`, a section of the
+normalized 3D state, not a separate 2D wavefunction.
+
+This distinguishes spatial quantum numbers from the 21 cm transition. The
+21 cm line is the electron-proton hyperfine spin flip between 1s states;
+the electronic spatial wavefunction is unchanged. Its measured frequency
+and wavelength are reference data, not outputs of the Coulomb spatial
+solver. The H21 scalar triad `φ⁵+π²+φ⁻⁴` currently evaluates near 21.10567,
+and its positional reading is explicit: `π²` is the E0/E2-centered
+gravity-bubble term, `φ⁵` is the outer reading, and `φ⁻⁴` is the inner
+reading. The triad links the central π anchor with inward and outward φ
+roles in the user's 3D lattice interpretation. This position-to-term bridge
+is encoded as a model mapping; it does not derive the Coulomb eigenvalue,
+hyperfine splitting, or SI scale from those terms.
+
+The dimensional-ladder source carries `H21,H21,H21` at e3 and
+`21cm,21cm,21cm` at e6. Applying the defect increment to the e6 integer-cm
+baseline gives:
+`λ_candidate = 21 cm + 7/66 cm = 21.1060606… cm ≈ 21.106 cm`.
+The triad is also the e3 value resolved toward e6: its base is
+`T = φ⁵ + π² + φ⁻⁴`, where `π²` is the E0/E2-centered bubble, `φ⁵` the
+outer reading, and `φ⁻⁴` the inner reading. Applying the same additive
+defect increment yields `T + 7/66`, about 21.21173298 in the current scalar
+convention. This does not equal 21.106114054; the computed triad residual
+stays explicit. Thus the terms are connected by the shared geometry and
+defect path, but neither the scalar arithmetic nor the 21cm endpoint alone
+proves the full physical mapping.
+The integer baseline check, `21 + 7/66 = 21.1060606… cm`, differs from
+the measured value by about `−0.000053448 cm` (about 0.535 micrometers).
+
+Scale sketch: disregarding its first 16³ panel as requested, the candidate
+transition compounds each 15³ core with its +1 shell and proceeds to the
+declared 30³/32³ tier pair. The 16³ shell is not an independent level; the
+721 shell sites participate only when compounding. The hydrogen solver is
+currently on the bare 15³ interior, with shell amplitudes absent.
+
+Evidence: the continuum 1s formula and its discrete Q128 implementation
+are distinct evidence classes. Tests check numerical exponential accuracy,
+radial symmetry, center-peaked density, central-slice consistency, and
+discrete norm one. The lattice Bohr-radius assignment remains model
+calibration; this does not derive atomic units from the lattice or establish
+a physical atom/lattice equivalence.
 
 ## Evidence boundary
 
